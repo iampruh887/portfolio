@@ -40,7 +40,7 @@ body {
   fill: black;
   font-size: 6px;
   font-weight: bold;
-  font-family: Arial, sans-serif;
+  font-family: "Bitcount Grid Double Ink", system-ui;
   pointer-events: none;
   letter-spacing: 0.5px;
 }
