@@ -82,7 +82,7 @@ body {
   z-index: 10;
   font-family: "Bitcount Grid Double Ink", system-ui;
   font-optical-sizing: auto;
-  font-size: 30px;
+  font-size: 90px;
   
   transition: box-shadow 0.3s ease;
   cursor: pointer;
