@@ -1,7 +1,7 @@
 # Circular Pie Menu Implementation
 
 ## Overview
-Built a 3-slice circular pie menu where each slice pops out individually when hovered, with text labels along the curved edges.
+Built a 3-slice circular pie menu where each slice pops out individually when hovered, with text labels along the curved edges and an interactive center button.
 
 ## Key Challenges & Solutions
 
@@ -23,6 +23,12 @@ Switched to SVG `<path>` elements with proper geometric definitions:
 - React state tracks which slice is hovered
 - Center "walkthrough" button overlays the middle
 
+### Dimensions
+- Circle diameter: 500px
+- Center button: 300px diameter
+- Ring width: ~100px (outer radius 250px, inner radius 150px)
+- Text size: 6px, positioned at radius 40 in SVG viewBox
+
 ### Text Labels
 - Slice 1 (top): "PROJECTS"
 - Slice 2 (bottom-right): "BLOGS"
@@ -30,7 +36,9 @@ Switched to SVG `<path>` elements with proper geometric definitions:
 
 Text follows curved paths at radius 40 (middle of the ring) and scales with the slice on hover.
 
-### Hover Effect
+### Hover Effects
+
+#### Slice Hover
 Each slice group (slice + text) pops towards the user in 3D:
 - `translateZ(50px)` - moves forward in 3D space
 - `scale(1.1)` - slight size increase
@@ -39,11 +47,18 @@ Each slice group (slice + text) pops towards the user in 3D:
 - `perspective: 800px` on parent for 3D context
 - `overflow: visible` prevents clipping during animation
 
+#### Center Button Hover
+The walkthrough button displays an inset shadow effect:
+- `inset box-shadow` with grey gradient
+- Creates depth perception towards the inside
+- Smooth transition for visual feedback
+
 ### Colors
 - All slices: yellow
 - Text: black
 - Center button: black background with white text
+- Hover shadow: greyish gradient (rgba(128, 128, 128, 0.5))
 
 ## Files Modified
 - `src/App.jsx` - SVG structure with grouped slices, text paths, and hover handlers
-- `src/App.css` - 3D transforms, group styling, and text formatting
+- `src/App.css` - 3D transforms, group styling, text formatting, and center button effects
