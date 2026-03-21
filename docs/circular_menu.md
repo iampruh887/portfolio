@@ -34,7 +34,12 @@ Switched to SVG `<path>` elements with proper geometric definitions:
 - Slice 2 (bottom-right): "BLOGS"
 - Slice 3 (bottom-left): "ABOUT ME"
 
-Text follows curved paths at radius 40 (middle of the ring) and scales with the slice on hover.
+Text follows curved paths at radius 40 (middle of the ring), uses "Bitcount Grid Double Ink" font, and scales with the slice on hover.
+
+### Performance Optimizations
+- `will-change: transform, filter` on slice groups for GPU acceleration
+- `text-rendering: optimizeSpeed` on text for faster SVG rendering
+- `transform-style: preserve-3d` for efficient 3D transforms
 
 ### Hover Effects
 

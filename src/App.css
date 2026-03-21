@@ -34,15 +34,17 @@ body {
 .slice-group {
   transition: transform 0.3s ease, filter 0.3s ease;
   transform-origin: 50% 50%;
+  will-change: transform, filter;
 }
 
 .slice-text {
   fill: black;
-  font-size: 6px;
+  font-size: 10px;
   font-weight: bold;
   font-family: "Bitcount Grid Double Ink", system-ui;
   pointer-events: none;
   letter-spacing: 0.5px;
+  text-rendering: optimizeSpeed;
 }
 
 .slice1 {
@@ -81,19 +83,7 @@ body {
   font-family: "Bitcount Grid Double Ink", system-ui;
   font-optical-sizing: auto;
   font-size: 30px;
-  font-weight: 900;
-  font-style: normal;
-  font-variation-settings:
-    "slnt" 0,
-    "CRSV" 0.5,
-    "ELSH" 0,
-    "ELXP" 0,
-    "SZP1" 0,
-    "SZP2" 0,
-    "XPN1" 0,
-    "XPN2" 0,
-    "YPN1" 0,
-    "YPN2" 0;
+  
   transition: box-shadow 0.3s ease;
   cursor: pointer;
 }
