@@ -35,6 +35,23 @@ body {
   transition: transform 0.3s ease, filter 0.3s ease;
   transform-origin: 50% 50%;
   will-change: transform, filter;
+  transform: none;
+}
+
+.wrapper.navigating .slice-group {
+  transition: none !important;
+}
+
+.slice-group.hovered {
+  transform: translateZ(50px) scale(1.1);
+  filter: brightness(1.3) drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+}
+
+.wrapper.navigating .slice-group,
+.wrapper.navigating .slice-group.hovered {
+  transform: none !important;
+  filter: none !important;
+  animation: none !important;
 }
 
 .slice-text {
@@ -48,20 +65,15 @@ body {
 }
 
 .slice1 {
-  fill: yellow;
+  fill: #F7FF00;
 }
 
 .slice2 {
-  fill: yellow;
+  fill: #F7FF00;
 }
 
 .slice3 {
-  fill: yellow;
-}
-
-.slice-group.hovered {
-  transform: translateZ(50px) scale(1.1);
-  filter: brightness(1.3) drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+  fill: #F7FF00;
 }
 
 .walkthrough {
@@ -90,4 +102,18 @@ body {
 
 .walkthrough:hover {
   box-shadow: inset 0 0 30px 10px rgba(193, 228, 16, 0.5);
+}
+
+
+.wrapper.navigating {
+  pointer-events: none;
+}
+
+.wrapper.navigating .circle {
+  perspective: none !important;
+  transform-style: flat !important;
+}
+
+.wrapper.navigating .pie-menu {
+  transform-style: flat !important;
 }

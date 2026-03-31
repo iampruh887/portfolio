@@ -1,11 +1,52 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './style/Menu.css';
 
-function Menu() {
+function Menu({ onNavigate }) {
   const [hoveredSlice, setHoveredSlice] = useState(null);
+  const [isNavigating, setIsNavigating] = useState(false);
+
+  useEffect(() => {
+    if (isNavigating) {
+      setHoveredSlice(null);
+    }
+  }, [isNavigating]);
+
+  const handleSliceClick = (slice) => {
+    if (slice === 1 && onNavigate) {
+      setHoveredSlice(null);
+      setIsNavigating(true);
+      setTimeout(() => {
+        onNavigate('projects');
+        setTimeout(() => {
+          setIsNavigating(false);
+        }, 500);
+      }, 0);
+    }
+    if (slice === 2 && onNavigate) {
+      setHoveredSlice(null);
+      setIsNavigating(true);
+      setTimeout(() => {
+        onNavigate('blogs');
+        setTimeout(() => {
+          setIsNavigating(false);
+        }, 500);
+      }, 0);
+    }
+  };
+
+  const handleWalkthroughClick = () => {
+    if (onNavigate) {
+      setIsNavigating(true);
+      onNavigate('menu');
+      // Reset navigating state after a delay since we might stay on same page
+      setTimeout(() => {
+        setIsNavigating(false);
+      }, 500);
+    }
+  };
 
   return (
-    <div className="wrapper">
+    <div className={`wrapper ${isNavigating ? 'navigating' : ''}`}>
       <div className="circle">
         <svg className="pie-menu" viewBox="0 0 100 100">
           <defs>
@@ -24,13 +65,14 @@ function Menu() {
           </defs>
           
           {/* Slice 1: Top (0° to 120°) */}
-          <g className={`slice-group ${hoveredSlice === 1 ? 'hovered' : ''}`}>
+          <g className={`slice-group ${!isNavigating && hoveredSlice === 1 ? 'hovered' : ''}`}>
             <path
               className="slice slice1"
               d="M 50,50 L 50,0 A 50,50 0 0,1 93.3,75 Z"
               mask="url(#ring-mask)"
-              onMouseEnter={() => setHoveredSlice(1)}
+              onMouseEnter={() => !isNavigating && setHoveredSlice(1)}
               onMouseLeave={() => setHoveredSlice(null)}
+              onClick={() => handleSliceClick(1)}
             />
             <text className="slice-text">
               <textPath href="#curve1" startOffset="50%" textAnchor="middle">
@@ -40,13 +82,14 @@ function Menu() {
           </g>
           
           {/* Slice 2: Bottom Right (120° to 240°) */}
-          <g className={`slice-group ${hoveredSlice === 2 ? 'hovered' : ''}`}>
+          <g className={`slice-group ${!isNavigating && hoveredSlice === 2 ? 'hovered' : ''}`}>
             <path
               className="slice slice2"
               d="M 50,50 L 93.3,75 A 50,50 0 0,1 6.7,75 Z"
               mask="url(#ring-mask)"
-              onMouseEnter={() => setHoveredSlice(2)}
+              onMouseEnter={() => !isNavigating && setHoveredSlice(2)}
               onMouseLeave={() => setHoveredSlice(null)}
+              onClick={() => handleSliceClick(2)}
             />
             <text className="slice-text">
               <textPath href="#curve2" startOffset="50%" textAnchor="middle">
@@ -56,13 +99,14 @@ function Menu() {
           </g>
           
           {/* Slice 3: Bottom Left (240° to 360°) */}
-          <g className={`slice-group ${hoveredSlice === 3 ? 'hovered' : ''}`}>
+          <g className={`slice-group ${!isNavigating && hoveredSlice === 3 ? 'hovered' : ''}`}>
             <path
               className="slice slice3"
               d="M 50,50 L 6.7,75 A 50,50 0 0,1 50,0 Z"
               mask="url(#ring-mask)"
-              onMouseEnter={() => setHoveredSlice(3)}
+              onMouseEnter={() => !isNavigating && setHoveredSlice(3)}
               onMouseLeave={() => setHoveredSlice(null)}
+              onClick={() => handleSliceClick(3)}
             />
             <text className="slice-text">
               <textPath href="#curve3" startOffset="50%" textAnchor="middle">
@@ -72,7 +116,7 @@ function Menu() {
           </g>
         </svg>
 
-        <div className="walkthrough">
+        <div className="walkthrough" onClick={handleWalkthroughClick}>
           🙭
         </div>
       </div>
