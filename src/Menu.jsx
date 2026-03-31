@@ -32,6 +32,16 @@ function Menu({ onNavigate }) {
         }, 500);
       }, 0);
     }
+    if (slice === 3 && onNavigate) {
+      setHoveredSlice(null);
+      setIsNavigating(true);
+      setTimeout(() => {
+        onNavigate('aboutme');
+        setTimeout(() => {
+          setIsNavigating(false);
+        }, 500);
+      }, 0);
+    }
   };
 
   const handleWalkthroughClick = () => {

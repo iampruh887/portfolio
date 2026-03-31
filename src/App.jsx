@@ -2,6 +2,7 @@ import { useState } from "react";
 import Menu from "./Menu.jsx";
 import Blog from "./Blogs.jsx";
 import Projects from "./Projects.jsx";
+import AboutMe from "./AboutMe.jsx";
 
 function App(){
     const [currentView, setCurrentView] = useState('menu');
@@ -13,7 +14,7 @@ function App(){
             return;
         }
         
-        if (view === 'blogs' || view === 'projects') {
+        if (view === 'blogs' || view === 'projects' || view === 'aboutme') {
             setIsTransitioning(true);
             setTimeout(() => {
                 setCurrentView(view);
@@ -29,6 +30,7 @@ function App(){
             {currentView === 'menu' && !isTransitioning && <Menu onNavigate={handleNavigate} />}
             {currentView === 'blogs' && <Blog onNavigate={handleNavigate} />}
             {currentView === 'projects' && <Projects onNavigate={handleNavigate} />}
+            {currentView === 'aboutme' && <AboutMe onNavigate={handleNavigate} />}
         </>
     )
 }
