@@ -1,6 +1,11 @@
 import { useState } from "react";
 import "./style/Blogs.css";
 import Menu from "./Menu.jsx";
+import commentIcon from "./assets/comment.png";
+import chevronBackward from "./assets/chevron_backward.png";
+import fullscreenIcon from "./assets/fullscreen.png";
+import chevronForward from "./assets/chevron_forward.png";
+import favoriteIcon from "./assets/favorite.png";
 
 function Blog({ onNavigate }) {
     const [isListVisible, setIsListVisible] = useState(true);
@@ -49,11 +54,11 @@ function Blog({ onNavigate }) {
                         </div>
                     </div>
                     <div className="icon-bar">
-                        <img src="/src/assets/comment.png" alt="comment" className="icon" />
-                        <img src="/src/assets/chevron_backward.png" alt="backward" className="icon" onClick={handlePrevious} />
-                        <img src="/src/assets/fullscreen.png" alt="fullscreen" className="icon" />
-                        <img src="/src/assets/chevron_forward.png" alt="forward" className="icon" onClick={handleNext} />
-                        <img src="/src/assets/favorite.png" alt="favorite" className="icon" />
+                        <img src={commentIcon} alt="comment" className="icon" />
+                        <img src={chevronBackward} alt="backward" className="icon" onClick={handlePrevious} />
+                        <img src={fullscreenIcon} alt="fullscreen" className="icon" />
+                        <img src={chevronForward} alt="forward" className="icon" onClick={handleNext} />
+                        <img src={favoriteIcon} alt="favorite" className="icon" />
                     </div>
                 </div>
                 <div className="menu-in-blog">

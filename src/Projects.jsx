@@ -1,6 +1,13 @@
 import { useState } from "react";
 import "./style/Projects.css";
 import Menu from "./Menu.jsx";
+import commentIcon from "./assets/comment.png";
+import chevronBackward from "./assets/chevron_backward.png";
+import fullscreenIcon from "./assets/fullscreen.png";
+import chevronForward from "./assets/chevron_forward.png";
+import favoriteIcon from "./assets/favorite.png";
+import eyeOn from "./assets/Eye.png";
+import eyeOff from "./assets/Eye off.png";
 
 function Projects({ onNavigate }) {
     const [currentProject, setCurrentProject] = useState(0);
@@ -49,13 +56,13 @@ function Projects({ onNavigate }) {
                         className={`view-option ${viewMode === 'on' ? 'active' : ''}`}
                         onClick={() => setViewMode('on')}
                     >
-                        <img src="/src/assets/Eye.png" alt="eye on" className="eye-icon" />
+                        <img src={eyeOn} alt="eye on" className="eye-icon" />
                     </div>
                     <div 
                         className={`view-option ${viewMode === 'off' ? 'active' : ''}`}
                         onClick={() => setViewMode('off')}
                     >
-                        <img src="/src/assets/Eye off.png" alt="eye off" className="eye-icon" />
+                        <img src={eyeOff} alt="eye off" className="eye-icon" />
                     </div>
                 </div>
 
@@ -81,11 +88,11 @@ function Projects({ onNavigate }) {
                                 </div>
                             </div>
                             <div className="project-icon-bar">
-                                <img src="/src/assets/comment.png" alt="comment" className="project-icon" />
-                                <img src="/src/assets/chevron_backward.png" alt="backward" className="project-icon" onClick={handlePrevious} />
-                                <img src="/src/assets/fullscreen.png" alt="fullscreen" className="project-icon" />
-                                <img src="/src/assets/chevron_forward.png" alt="forward" className="project-icon" onClick={handleNext} />
-                                <img src="/src/assets/favorite.png" alt="favorite" className="project-icon" />
+                                <img src={commentIcon} alt="comment" className="project-icon" />
+                                <img src={chevronBackward} alt="backward" className="project-icon" onClick={handlePrevious} />
+                                <img src={fullscreenIcon} alt="fullscreen" className="project-icon" />
+                                <img src={chevronForward} alt="forward" className="project-icon" onClick={handleNext} />
+                                <img src={favoriteIcon} alt="favorite" className="project-icon" />
                             </div>
                         </div>
                     </>
@@ -106,11 +113,11 @@ function Projects({ onNavigate }) {
                                 <div className="project-number">Project {currentProject + 1}</div>
                             </div>
                             <div className="project-list-icon-bar">
-                                <img src="/src/assets/comment.png" alt="comment" className="project-icon" />
-                                <img src="/src/assets/chevron_backward.png" alt="backward" className="project-icon" onClick={handlePrevious} />
-                                <img src="/src/assets/fullscreen.png" alt="fullscreen" className="project-icon" />
-                                <img src="/src/assets/chevron_forward.png" alt="forward" className="project-icon" onClick={handleNext} />
-                                <img src="/src/assets/favorite.png" alt="favorite" className="project-icon" />
+                                <img src={commentIcon} alt="comment" className="project-icon" />
+                                <img src={chevronBackward} alt="backward" className="project-icon" onClick={handlePrevious} />
+                                <img src={fullscreenIcon} alt="fullscreen" className="project-icon" />
+                                <img src={chevronForward} alt="forward" className="project-icon" onClick={handleNext} />
+                                <img src={favoriteIcon} alt="favorite" className="project-icon" />
                             </div>
                         </div>
                         <div className="menu-in-projects-list">
