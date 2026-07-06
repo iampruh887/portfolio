@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./style/Projects.css";
 import Menu from "./Menu.jsx";
 import { fetchList } from "./lib/content.js";
@@ -19,7 +19,7 @@ function ProjectCard({ project }) {
             <p className="project-desc">{project.description}</p>
             {project.tech?.length > 0 && (
                 <div className="project-tech">
-                    {project.tech.map((t) => <span key={t} className="tech-chip">{t}</span>)}
+                    {project.tech.map((t, i) => <span key={`${t}-${i}`} className="tech-chip">{t}</span>)}
                 </div>
             )}
             <div className="project-links">
@@ -44,22 +44,28 @@ function Projects({ onNavigate }) {
             .catch(() => setStatus('error'));
     }, []);
 
+    const timersRef = useRef([]);
+    const clearTimers = () => { timersRef.current.forEach(clearTimeout); timersRef.current = []; };
+    useEffect(() => clearTimers, []);
+
     const totalProjects = projects.length;
     const getPreviousProject = () => (currentProject === 0 ? totalProjects - 1 : currentProject - 1);
     const getNextProject = () => (currentProject === totalProjects - 1 ? 0 : currentProject + 1);
 
     const handlePrevious = () => {
         if (totalProjects < 2) return;
+        clearTimers();
         setDirection('slide-right');
-        setTimeout(() => setCurrentProject((p) => (p === 0 ? totalProjects - 1 : p - 1)), 300);
-        setTimeout(() => setDirection(''), 600);
+        timersRef.current.push(setTimeout(() => setCurrentProject((p) => (p === 0 ? projects.length - 1 : p - 1)), 300));
+        timersRef.current.push(setTimeout(() => setDirection(''), 600));
     };
 
     const handleNext = () => {
         if (totalProjects < 2) return;
+        clearTimers();
         setDirection('slide-left');
-        setTimeout(() => setCurrentProject((p) => (p === totalProjects - 1 ? 0 : p + 1)), 300);
-        setTimeout(() => setDirection(''), 600);
+        timersRef.current.push(setTimeout(() => setCurrentProject((p) => (p === projects.length - 1 ? 0 : p + 1)), 300));
+        timersRef.current.push(setTimeout(() => setDirection(''), 600));
     };
 
     const toggleList = () => setIsListVisible(!isListVisible);

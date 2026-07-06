@@ -17,10 +17,11 @@ function Stars({ rating }) {
 function HeroRotator({ images }) {
   const [index, setIndex] = useState(0)
   useEffect(() => {
+    setIndex(0)
     if (images.length < 2) return
     const t = setInterval(() => setIndex((i) => (i + 1) % images.length), 4000)
     return () => clearInterval(t)
-  }, [images.length])
+  }, [images])
   if (images.length === 0) {
     return <div className="hero-placeholder">this image will keep changing</div>
   }
@@ -34,9 +35,11 @@ function HeroRotator({ images }) {
 }
 
 function formatRange(exp) {
-  const fmt = (d) => d
-    ? new Date(d).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
-    : ''
+  const fmt = (d) => {
+    if (!d) return ''
+    const dt = new Date(d)
+    return isNaN(dt) ? String(d) : dt.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+  }
   if (!exp.start_date) return ''
   return `${fmt(exp.start_date)} – ${exp.is_current || !exp.end_date ? 'Present' : fmt(exp.end_date)}`
 }

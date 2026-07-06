@@ -7,7 +7,7 @@ function ContributionGraph({ username }) {
   const [error, setError] = useState(false)
 
   useEffect(() => {
-    if (!username) return
+    if (!username) { setError(true); return }
     fetch(`/api/contributions?user=${encodeURIComponent(username)}`)
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then(setCal)

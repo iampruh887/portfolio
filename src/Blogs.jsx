@@ -22,8 +22,8 @@ function Blog({ onNavigate }) {
 
     const totalBlogs = blogs.length;
     const toggleList = () => setIsListVisible(!isListVisible);
-    const handlePrevious = () => setCurrentBlog((p) => (p === 0 ? totalBlogs - 1 : p - 1));
-    const handleNext = () => setCurrentBlog((p) => (p === totalBlogs - 1 ? 0 : p + 1));
+    const handlePrevious = () => { if (totalBlogs === 0) return; setCurrentBlog((p) => (p === 0 ? totalBlogs - 1 : p - 1)); };
+    const handleNext = () => { if (totalBlogs === 0) return; setCurrentBlog((p) => (p === totalBlogs - 1 ? 0 : p + 1)); };
 
     const blog = blogs[currentBlog];
 
@@ -54,7 +54,7 @@ function Blog({ onNavigate }) {
                                     {blog.cover_image_url && (
                                         <img src={blog.cover_image_url} alt="" className="blog-cover" />
                                     )}
-                                    {blog.content.split(/\n{2,}/).map((para, i) => (
+                                    {(blog.content ?? '').split(/\n{2,}/).map((para, i) => (
                                         <p key={i}>{para}</p>
                                     ))}
                                 </>

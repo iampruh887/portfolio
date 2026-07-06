@@ -10,7 +10,7 @@ function Field({ field, value, onChange }) {
       return <textarea rows={5} value={value ?? ''} onChange={(e) => set(e.target.value)} />
     case 'number':
       return <input type="number" min={field.min} max={field.max}
-                    value={value ?? ''} onChange={(e) => set(Number(e.target.value))} />
+                    value={value ?? ''} onChange={(e) => set(e.target.value === '' ? null : Number(e.target.value))} />
     case 'checkbox':
       return <input type="checkbox" checked={Boolean(value)} onChange={(e) => set(e.target.checked)} />
     case 'date':
@@ -56,7 +56,13 @@ function normalize(fields, form) {
 }
 
 function RowForm({ config, initial, onSave, onCancel }) {
-  const [form, setForm] = useState(initial ?? {})
+  const [form, setForm] = useState(() => {
+    const f = { ...(initial ?? {}) }
+    config.fields.forEach((fd) => {
+      if (fd.type === 'select' && f[fd.name] == null) f[fd.name] = fd.options[0]
+    })
+    return f
+  })
   const change = (name, v) => setForm((f) => ({ ...f, [name]: v }))
   const missing = config.fields.filter((f) => f.required && !form[f.name])
   return (
@@ -91,7 +97,7 @@ function AdminSection({ table, config }) {
   const wrap = (fn) => async (...args) => {
     setError('')
     try { await fn(...args); setEditing(null); load() }
-    catch (e) { setError(e.message) }
+    catch (e) { if (e.message !== 'cancelled') setError(e.message) }
   }
 
   const create = wrap((form) => adminCreate(table, { ...form, sort_order: rows.length + 1 }))
@@ -115,7 +121,7 @@ function AdminSection({ table, config }) {
     return (
       <div className="admin-section">
         {error && <p className="admin-error">{error}</p>}
-        <RowForm config={config} initial={row} onSave={(form) => update(row.id, form)} />
+        <RowForm key={row.updated_at ?? 'profile'} config={config} initial={row} onSave={(form) => update(row.id, form)} />
       </div>
     )
   }
