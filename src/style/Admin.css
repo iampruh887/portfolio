@@ -1,0 +1,43 @@
+.admin-wrap {
+  min-height: 100vh;
+  background: #1c1c1e;
+  color: #eee;
+  padding: 24px;
+  box-sizing: border-box;
+  font-family: system-ui, sans-serif;
+}
+
+.admin-login { max-width: 320px; margin: 20vh auto; display: flex; flex-direction: column; gap: 12px; }
+.admin-header { display: flex; justify-content: space-between; align-items: center; max-width: 900px; margin: 0 auto; }
+.admin-tabs { display: flex; flex-wrap: wrap; gap: 8px; max-width: 900px; margin: 16px auto; }
+.admin-tabs button.active { background: #F7FF00; color: #000; }
+
+.admin-section { max-width: 900px; margin: 0 auto; }
+.admin-rows { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+.admin-rows li { background: #2a2a2e; border-radius: 8px; padding: 10px 14px; }
+.admin-rows li.unpublished { opacity: 0.45; }
+.admin-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.row-title { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.row-actions { display: flex; gap: 6px; flex: 0 0 auto; }
+
+.row-form { display: flex; flex-direction: column; gap: 10px; background: #2a2a2e; border-radius: 8px; padding: 14px; margin-top: 12px; }
+.row-form label { display: grid; grid-template-columns: 140px 1fr; align-items: start; gap: 10px; font-size: 14px; }
+.row-form input[type="text"], .row-form input[type="number"], .row-form input[type="date"],
+.row-form textarea, .row-form select {
+  width: 100%; box-sizing: border-box; background: #1c1c1e; color: #eee;
+  border: 1px solid #444; border-radius: 6px; padding: 8px;
+}
+.form-actions { display: flex; gap: 8px; }
+
+.admin-wrap button {
+  background: #3a3a3e; color: #eee; border: none; border-radius: 6px;
+  padding: 6px 14px; cursor: pointer; font-size: 14px;
+}
+.admin-wrap button:hover { background: #4a4a4e; }
+.admin-wrap button:disabled { opacity: 0.4; cursor: default; }
+.admin-wrap button.danger { background: #7a1f1f; }
+.admin-wrap button.secondary { background: transparent; border: 1px solid #555; }
+
+.image-field { display: flex; flex-direction: column; gap: 6px; }
+.image-preview { max-width: 160px; border-radius: 6px; }
+.admin-error { color: #ff7b72; }
