@@ -13,6 +13,9 @@ export default async function handler(req, res) {
   if (!contentType.startsWith('image/')) {
     return res.status(400).json({ error: 'only image uploads allowed' })
   }
+  if (!/^[A-Za-z0-9+/]+={0,2}$/.test(dataBase64)) {
+    return res.status(400).json({ error: 'invalid base64' })
+  }
   const buffer = Buffer.from(dataBase64, 'base64')
   const path = `${Date.now()}-${String(filename).replace(/[^\w.-]/g, '_')}`
   const sb = adminClient()

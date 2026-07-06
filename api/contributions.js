@@ -23,6 +23,7 @@ export default async function handler(req, res) {
     res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=86400')
     return res.status(200).json(normalizeCalendar(calendar))
   } catch (err) {
-    return res.status(500).json({ error: err.message })
+    console.error(err)
+    return res.status(500).json({ error: 'internal error' })
   }
 }

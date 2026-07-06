@@ -6,7 +6,8 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'method not allowed' })
   if (!isAuthorized(req)) return res.status(401).json({ error: 'unauthorized' })
   const { table, ids } = req.body ?? {}
-  if (!isAllowedTable(table) || table === 'profile' || !Array.isArray(ids)) {
+  if (!isAllowedTable(table) || table === 'profile' || !Array.isArray(ids)
+      || ids.length === 0 || ids.some((id) => id == null)) {
     return res.status(400).json({ error: 'bad request' })
   }
   const sb = adminClient()

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import './style/Menu.css';
 
+const SLICE_VIEWS = { 1: 'projects', 2: 'blogs', 3: 'about' }
+
 function Menu({ onNavigate }) {
   const [hoveredSlice, setHoveredSlice] = useState(null);
   const [isNavigating, setIsNavigating] = useState(false);
@@ -10,8 +12,6 @@ function Menu({ onNavigate }) {
       setHoveredSlice(null);
     }
   }, [isNavigating]);
-
-  const SLICE_VIEWS = { 1: 'projects', 2: 'blogs', 3: 'about' }
 
   const handleSliceClick = (slice) => {
     const view = SLICE_VIEWS[slice]

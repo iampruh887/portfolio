@@ -41,7 +41,7 @@ create table if not exists blogs (
   slug text unique,
   content text not null default '',
   cover_image_url text not null default '',
-  published_at date not null default now(),
+  published_at date not null default current_date,
   sort_order int not null default 0,
   is_published boolean not null default true,
   created_at timestamptz not null default now(),
@@ -108,7 +108,7 @@ begin
     execute format('drop trigger if exists handle_updated_at on %I', t);
     execute format(
       'create trigger handle_updated_at before update on %I
-       for each row execute procedure extensions.moddatetime (updated_at)', t);
+       for each row execute function extensions.moddatetime (updated_at)', t);
   end loop;
 end $$;
 

@@ -8,8 +8,10 @@ function headers(json = true) {
 
 async function unwrap(resPromise) {
   const res = await resPromise
-  const body = await res.json().catch(() => ({}))
-  if (!res.ok) throw new Error(body.error ?? `HTTP ${res.status}`)
+  const text = await res.text().catch(() => '')
+  let body = {}
+  try { body = text ? JSON.parse(text) : {} } catch { body = {} }
+  if (!res.ok) throw new Error(body.error ?? (text || `HTTP ${res.status}`))
   return body
 }
 
@@ -57,5 +59,6 @@ export async function adminUpload(file) {
   const out = await unwrap(fetch('/api/admin/upload', {
     method: 'POST', headers: headers(), body: JSON.stringify(body),
   }))
+  if (!out.url) throw new Error('Upload response missing url')
   return out.url
 }
