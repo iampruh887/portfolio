@@ -1,7 +1,5 @@
 {
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/api/(.*)", "status": 404 },
-    { "src": "/(.*)", "dest": "/index.html" }
+  "rewrites": [
+    { "source": "/((?!api/|assets/|src/|node_modules/|@).*)", "destination": "/index.html" }
   ]
 }
