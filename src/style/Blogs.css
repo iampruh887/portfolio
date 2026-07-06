@@ -123,6 +123,8 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+    overflow-y: auto;
+    max-height: 100%;
 }
 
 .blog-content h2 {
@@ -140,4 +142,10 @@
     color: #333333;
     line-height: 1.6;
     margin: 0;
+}
+
+.blog-cover {
+    max-width: 100%;
+    border-radius: 8px;
+    margin: 8px 0 16px;
 }
