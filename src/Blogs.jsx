@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./style/Blogs.css";
 import Menu from "./Menu.jsx";
+import { fetchList } from "./lib/content.js";
 import commentIcon from "./assets/comment.png";
 import chevronBackward from "./assets/chevron_backward.png";
 import fullscreenIcon from "./assets/fullscreen.png";
@@ -10,23 +11,21 @@ import favoriteIcon from "./assets/favorite.png";
 function Blog({ onNavigate }) {
     const [isListVisible, setIsListVisible] = useState(true);
     const [currentBlog, setCurrentBlog] = useState(0);
-    const totalBlogs = 10;
+    const [blogs, setBlogs] = useState([]);
+    const [status, setStatus] = useState('loading'); // loading | ready | error
 
-    const toggleList = () => {
-        setIsListVisible(!isListVisible);
-    };
+    useEffect(() => {
+        fetchList('blogs')
+            .then((rows) => { setBlogs(rows); setStatus('ready'); })
+            .catch(() => setStatus('error'));
+    }, []);
 
-    const handlePrevious = () => {
-        setCurrentBlog((prev) => (prev === 0 ? totalBlogs - 1 : prev - 1));
-    };
+    const totalBlogs = blogs.length;
+    const toggleList = () => setIsListVisible(!isListVisible);
+    const handlePrevious = () => setCurrentBlog((p) => (p === 0 ? totalBlogs - 1 : p - 1));
+    const handleNext = () => setCurrentBlog((p) => (p === totalBlogs - 1 ? 0 : p + 1));
 
-    const handleNext = () => {
-        setCurrentBlog((prev) => (prev === totalBlogs - 1 ? 0 : prev + 1));
-    };
-
-    const handleBlogClick = (index) => {
-        setCurrentBlog(index);
-    };
+    const blog = blogs[currentBlog];
 
     return (
         <>
@@ -34,23 +33,32 @@ function Blog({ onNavigate }) {
                 <div className={`hamburger ${!isListVisible ? 'rotated' : ''}`} onClick={toggleList}></div>
                 {isListVisible && (
                     <div className="list">
-                        <div className={`blogitem ${currentBlog === 0 ? 'active' : ''}`} onClick={() => handleBlogClick(0)}>blogitem1</div>
-                        <div className={`blogitem ${currentBlog === 1 ? 'active' : ''}`} onClick={() => handleBlogClick(1)}>blogitem2</div>
-                        <div className={`blogitem ${currentBlog === 2 ? 'active' : ''}`} onClick={() => handleBlogClick(2)}>blogitem3</div>
-                        <div className={`blogitem ${currentBlog === 3 ? 'active' : ''}`} onClick={() => handleBlogClick(3)}>blogitem4</div>
-                        <div className={`blogitem ${currentBlog === 4 ? 'active' : ''}`} onClick={() => handleBlogClick(4)}>blogitem5</div>
-                        <div className={`blogitem ${currentBlog === 5 ? 'active' : ''}`} onClick={() => handleBlogClick(5)}>blogitem6</div>
-                        <div className={`blogitem ${currentBlog === 6 ? 'active' : ''}`} onClick={() => handleBlogClick(6)}>blogitem7</div>
-                        <div className={`blogitem ${currentBlog === 7 ? 'active' : ''}`} onClick={() => handleBlogClick(7)}>blogitem8</div>
-                        <div className={`blogitem ${currentBlog === 8 ? 'active' : ''}`} onClick={() => handleBlogClick(8)}>blogitem9</div>
-                        <div className={`blogitem ${currentBlog === 9 ? 'active' : ''}`} onClick={() => handleBlogClick(9)}>blogitem10</div>
+                        {blogs.map((b, i) => (
+                            <div key={b.id}
+                                 className={`blogitem ${currentBlog === i ? 'active' : ''}`}
+                                 onClick={() => setCurrentBlog(i)}>
+                                {b.title}
+                            </div>
+                        ))}
                     </div>
                 )}
                 <div className="blogview-container">
                     <div className={`blogview ${!isListVisible ? 'expanded' : ''}`}>
                         <div className="blog-content">
-                            <h2>Blog Post {currentBlog + 1}</h2>
-                            <p>This is the content for blog post {currentBlog + 1}. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                            {status === 'loading' && <p>Loading…</p>}
+                            {status === 'error' && <p>Couldn't load blogs. Try again later.</p>}
+                            {status === 'ready' && !blog && <p>No blogs yet — check back soon.</p>}
+                            {blog && (
+                                <>
+                                    <h2>{blog.title}</h2>
+                                    {blog.cover_image_url && (
+                                        <img src={blog.cover_image_url} alt="" className="blog-cover" />
+                                    )}
+                                    {blog.content.split(/\n{2,}/).map((para, i) => (
+                                        <p key={i}>{para}</p>
+                                    ))}
+                                </>
+                            )}
                         </div>
                     </div>
                     <div className="icon-bar">
