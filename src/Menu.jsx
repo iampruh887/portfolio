@@ -11,27 +11,17 @@ function Menu({ onNavigate }) {
     }
   }, [isNavigating]);
 
+  const SLICE_VIEWS = { 1: 'projects', 2: 'blogs', 3: 'about' }
+
   const handleSliceClick = (slice) => {
-    if (slice === 1 && onNavigate) {
-      setHoveredSlice(null);
-      setIsNavigating(true);
-      setTimeout(() => {
-        onNavigate('projects');
-        setTimeout(() => {
-          setIsNavigating(false);
-        }, 500);
-      }, 0);
-    }
-    if (slice === 2 && onNavigate) {
-      setHoveredSlice(null);
-      setIsNavigating(true);
-      setTimeout(() => {
-        onNavigate('blogs');
-        setTimeout(() => {
-          setIsNavigating(false);
-        }, 500);
-      }, 0);
-    }
+    const view = SLICE_VIEWS[slice]
+    if (!view || !onNavigate) return
+    setHoveredSlice(null)
+    setIsNavigating(true)
+    setTimeout(() => {
+      onNavigate(view)
+      setTimeout(() => setIsNavigating(false), 500)
+    }, 0)
   };
 
   const handleWalkthroughClick = () => {

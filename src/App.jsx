@@ -1,35 +1,24 @@
-import { useState } from "react";
-import Menu from "./Menu.jsx";
-import Blog from "./Blogs.jsx";
-import Projects from "./Projects.jsx";
+import { Routes, Route, useNavigate } from 'react-router-dom'
+import Menu from './Menu.jsx'
+import Blog from './Blogs.jsx'
+import Projects from './Projects.jsx'
+import About from './pages/About.jsx'
 
-function App(){
-    const [currentView, setCurrentView] = useState('menu');
-    const [isTransitioning, setIsTransitioning] = useState(false);
+const VIEW_PATHS = { menu: '/', projects: '/projects', blogs: '/blogs', about: '/about' }
 
-    const handleNavigate = (view) => {
-        // Don't navigate if already on that view
-        if (view === currentView) {
-            return;
-        }
-        
-        if (view === 'blogs' || view === 'projects') {
-            setIsTransitioning(true);
-            setTimeout(() => {
-                setCurrentView(view);
-                setIsTransitioning(false);
-            }, 300);
-        } else {
-            setCurrentView(view);
-        }
-    };
+function App() {
+  const navigate = useNavigate()
+  const handleNavigate = (view) => navigate(VIEW_PATHS[view] ?? '/')
 
-    return(
-        <>
-            {currentView === 'menu' && !isTransitioning && <Menu onNavigate={handleNavigate} />}
-            {currentView === 'blogs' && <Blog onNavigate={handleNavigate} />}
-            {currentView === 'projects' && <Projects onNavigate={handleNavigate} />}
-        </>
-    )
+  return (
+    <Routes>
+      <Route path="/" element={<Menu onNavigate={handleNavigate} />} />
+      <Route path="/projects" element={<Projects onNavigate={handleNavigate} />} />
+      <Route path="/blogs" element={<Blog onNavigate={handleNavigate} />} />
+      <Route path="/about" element={<About onNavigate={handleNavigate} />} />
+      <Route path="*" element={<Menu onNavigate={handleNavigate} />} />
+    </Routes>
+  )
 }
-export default App;
+
+export default App
