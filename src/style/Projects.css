@@ -329,3 +329,48 @@
     transform: scale(0.7);
     margin-right: 0;
 }
+
+.project-card {
+    padding: 32px;
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: left;
+    overflow-y: auto;
+    max-height: 100%;
+}
+
+.project-title { margin: 0 0 12px; }
+
+.project-image {
+    max-width: 100%;
+    max-height: 260px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    object-fit: cover;
+}
+
+.project-desc { line-height: 1.5; color: #222; }
+
+.project-tech { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+
+.tech-chip {
+    background: #F7FF00;
+    color: #000;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.project-links { display: flex; gap: 16px; }
+.project-links a { color: #000; font-weight: 700; }
+
+.projects-empty {
+    height: 100vh;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-size: 20px;
+}
+
+.project-list-item.active { background-color: #F7FF00; }
