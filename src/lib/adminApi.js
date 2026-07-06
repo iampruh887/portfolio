@@ -34,16 +34,16 @@ export function adminLogout() {
 }
 
 export const adminList = (table) =>
-  unwrap(fetch(`/api/admin/${table}`, { headers: headers(false) }))
+  unwrap(fetch(`/api/admin/crud?table=${encodeURIComponent(table)}`, { headers: headers(false) }))
 
 export const adminCreate = (table, row) =>
-  unwrap(fetch(`/api/admin/${table}`, { method: 'POST', headers: headers(), body: JSON.stringify(row) }))
+  unwrap(fetch(`/api/admin/crud?table=${encodeURIComponent(table)}`, { method: 'POST', headers: headers(), body: JSON.stringify(row) }))
 
 export const adminUpdate = (table, id, patch) =>
-  unwrap(fetch(`/api/admin/${table}/${id}`, { method: 'PATCH', headers: headers(), body: JSON.stringify(patch) }))
+  unwrap(fetch(`/api/admin/crud?table=${encodeURIComponent(table)}&id=${encodeURIComponent(id)}`, { method: 'PATCH', headers: headers(), body: JSON.stringify(patch) }))
 
 export const adminDelete = (table, id) =>
-  unwrap(fetch(`/api/admin/${table}/${id}`, { method: 'DELETE', headers: headers(false) }))
+  unwrap(fetch(`/api/admin/crud?table=${encodeURIComponent(table)}&id=${encodeURIComponent(id)}`, { method: 'DELETE', headers: headers(false) }))
 
 export const adminReorder = (table, ids) =>
   unwrap(fetch('/api/admin/reorder', { method: 'POST', headers: headers(), body: JSON.stringify({ table, ids }) }))
