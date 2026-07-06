@@ -69,7 +69,7 @@ function Projects({ onNavigate }) {
             <div className="projects-wrap">
                 <div className="projects-empty">
                     {status === 'loading' ? 'Loading…' :
-                     status === 'error' ? 'Couldn't load projects.' : 'No projects yet.'}
+                     status === 'error' ? "Couldn't load projects." : 'No projects yet.'}
                 </div>
                 <div className="menu-in-projects"><Menu onNavigate={onNavigate} /></div>
             </div>
