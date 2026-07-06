@@ -123,6 +123,8 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+    overflow-y: auto;
+    max-height: 100%;
 }
 
 .blog-content h2 {
@@ -146,9 +148,4 @@
     max-width: 100%;
     border-radius: 8px;
     margin: 8px 0 16px;
-}
-
-.blog-content {
-    overflow-y: auto;
-    max-height: 100%;
 }
