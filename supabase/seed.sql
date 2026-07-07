@@ -58,13 +58,9 @@ on conflict (id) do nothing;
 
 insert into experiences (id, role, org, location, description, start_date, end_date, is_current, kind, sort_order) values
 ('22222222-0000-0000-0000-000000000001',
- 'AI Intern (Agentic Systems & Automation Platforms)', 'Stealth Startup', 'Remote',
- 'Automated root cause analysis and merging of industrial datasets; built an AutoML platform for industrial datasets and machineries; deployed AutoML + RAG assistant + image segmentation platform to Azure.',
- '2025-12-01', '2026-04-30', false, 'work', 1),
-('22222222-0000-0000-0000-000000000002',
- 'AI Intern (Agentic Systems)', 'Stealth Startup', 'Remote',
- 'Worked with agentic AI frameworks including LangChain and Google ADK; built prototype agents with tool use, memory, and task decomposition across modular environments.',
- '2025-07-01', '2025-10-31', false, 'work', 2),
+ 'AI Intern', 'Stealth Startup', 'Remote',
+ 'Built agentic AI systems across two internship terms: prototyped agents with tool use, memory, and task decomposition using LangChain and Google ADK; then built an AutoML platform for industrial datasets and shipped a full platform (AutoML + RAG assistant + image segmentation) to Azure, including automated root-cause analysis and dataset merging.',
+ '2025-07-01', '2026-04-30', false, 'work', 1),
 ('22222222-0000-0000-0000-000000000003',
  'Python Intern', 'Jobmato', 'Remote',
  'Built large-scale web scraping and structured data ingestion pipelines for candidate-job mapping.',

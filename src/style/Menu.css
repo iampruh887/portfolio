@@ -81,9 +81,9 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  
-  height: 300px;
-  width: 300px;
+
+  height: 60%;
+  width: 60%;
   background: black;
   border-radius: 50%;
   
