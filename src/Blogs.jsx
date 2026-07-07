@@ -49,15 +49,22 @@ function Blog({ onNavigate }) {
                             {status === 'error' && <p>Couldn't load blogs. Try again later.</p>}
                             {status === 'ready' && !blog && <p>No blogs yet — check back soon.</p>}
                             {blog && (
-                                <>
+                                <article className="blog-article">
                                     <h2>{blog.title}</h2>
+                                    {blog.published_at && (
+                                        <span className="blog-date">
+                                            {new Date(blog.published_at).toLocaleDateString('en-US', {
+                                                month: 'long', day: 'numeric', year: 'numeric',
+                                            })}
+                                        </span>
+                                    )}
                                     {blog.cover_image_url && (
                                         <img src={blog.cover_image_url} alt="" className="blog-cover" />
                                     )}
                                     {(blog.content ?? '').split(/\n{2,}/).map((para, i) => (
                                         <p key={i}>{para}</p>
                                     ))}
-                                </>
+                                </article>
                             )}
                         </div>
                     </div>

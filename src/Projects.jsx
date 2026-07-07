@@ -14,18 +14,21 @@ function ProjectCard({ project }) {
     if (!project) return null;
     return (
         <div className="project-card">
+            {project.date_label && <span className="project-date">{project.date_label}</span>}
             <h2 className="project-title">{project.title}</h2>
-            {project.image_url && <img src={project.image_url} alt="" className="project-image" />}
-            <p className="project-desc">{project.description}</p>
             {project.tech?.length > 0 && (
                 <div className="project-tech">
                     {project.tech.map((t, i) => <span key={`${t}-${i}`} className="tech-chip">{t}</span>)}
                 </div>
             )}
-            <div className="project-links">
-                {project.repo_url && <a href={project.repo_url} target="_blank" rel="noreferrer">Code</a>}
-                {project.live_url && <a href={project.live_url} target="_blank" rel="noreferrer">Live</a>}
-            </div>
+            {project.image_url && <img src={project.image_url} alt="" className="project-image" />}
+            <p className="project-desc">{project.description}</p>
+            {(project.repo_url || project.live_url) && (
+                <div className="project-links">
+                    {project.repo_url && <a href={project.repo_url} target="_blank" rel="noreferrer">Code ↗</a>}
+                    {project.live_url && <a href={project.live_url} target="_blank" rel="noreferrer">Live ↗</a>}
+                </div>
+            )}
         </div>
     );
 }
@@ -103,6 +106,7 @@ function Projects({ onNavigate }) {
                             <div className="project-carousel">
                                 <div className="project-side project-left" onClick={handlePrevious}>
                                     <div className="project-preview-content">
+                                        <span className="preview-hint">‹</span>
                                         <div className="preview-number">{projects[getPreviousProject()]?.title}</div>
                                     </div>
                                 </div>
@@ -111,6 +115,7 @@ function Projects({ onNavigate }) {
                                 </div>
                                 <div className="project-side project-right" onClick={handleNext}>
                                     <div className="project-preview-content">
+                                        <span className="preview-hint">›</span>
                                         <div className="preview-number">{projects[getNextProject()]?.title}</div>
                                     </div>
                                 </div>
