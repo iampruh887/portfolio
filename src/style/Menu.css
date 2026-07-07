@@ -14,8 +14,6 @@ body {
   height: 500px;
   width: 500px;
   overflow: visible;
-  perspective: 800px;
-  transform-style: preserve-3d;
 }
 
 .pie-menu {
@@ -24,7 +22,6 @@ body {
   width: 100%;
   height: 100%;
   overflow: visible;
-  transform-style: preserve-3d;
 }
 
 .slice {
@@ -32,9 +29,12 @@ body {
 }
 
 .slice-group {
-  transition: transform 0.3s ease, filter 0.3s ease;
+  /* NOTE: transform is deliberately NOT transitioned — Chromium does not run
+     animated transforms on SVG children (they never paint), and Firefox
+     drops SVG-masked elements inside preserve-3d contexts. Static transforms
+     + a filter transition work everywhere. */
+  transition: filter 0.3s ease;
   transform-origin: 50% 50%;
-  will-change: transform, filter;
   transform: none;
 }
 
@@ -43,7 +43,7 @@ body {
 }
 
 .slice-group.hovered {
-  transform: translateZ(50px) scale(1.1);
+  transform: scale(1.12);
   filter: brightness(1.3) drop-shadow(0 10px 20px rgba(0,0,0,0.3));
 }
 
@@ -107,13 +107,4 @@ body {
 
 .wrapper.navigating {
   pointer-events: none;
-}
-
-.wrapper.navigating .circle {
-  perspective: none !important;
-  transform-style: flat !important;
-}
-
-.wrapper.navigating .pie-menu {
-  transform-style: flat !important;
 }
