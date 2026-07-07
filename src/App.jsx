@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { Routes, Route, useNavigate } from 'react-router-dom'
-import Menu from './Menu.jsx'
+import Home from './pages/Home.jsx'
 import Blog from './Blogs.jsx'
 import Projects from './Projects.jsx'
 import About from './pages/About.jsx'
@@ -16,16 +16,16 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Menu onNavigate={handleNavigate} />} />
-        <Route path="/projects" element={<Projects onNavigate={handleNavigate} />} />
-        <Route path="/blogs" element={<Blog onNavigate={handleNavigate} />} />
+        <Route path="/" element={<Home onNavigate={handleNavigate} />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/blogs" element={<Blog />} />
         <Route path="/about" element={<About onNavigate={handleNavigate} />} />
         <Route path="/admin" element={
-          <Suspense fallback={<div style={{ color: '#fff', padding: 40 }}>Loading…</div>}>
+          <Suspense fallback={<div style={{ color: '#e9e4d6', padding: 40 }}>Loading…</div>}>
             <Admin />
           </Suspense>
         } />
-        <Route path="*" element={<Menu onNavigate={handleNavigate} />} />
+        <Route path="*" element={<Home onNavigate={handleNavigate} />} />
       </Routes>
       <AdminGate />
     </>

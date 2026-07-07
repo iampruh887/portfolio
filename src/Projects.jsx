@@ -1,55 +1,11 @@
-import { useState, useEffect, useRef } from "react";
-import "./style/Projects.css";
-import Menu from "./Menu.jsx";
+import { useState, useEffect } from "react";
+import Shell from "./components/Shell.jsx";
 import { fetchList } from "./lib/content.js";
-import eyeOn from "./assets/Eye.png";
-import eyeOff from "./assets/Eye off.png";
 
-function Dock({ current, total, onPrev, onNext }) {
-    return (
-        <div className="dock">
-            <button onClick={onPrev} aria-label="previous">‹</button>
-            <span className="dock-counter">
-                <b>{String(current + 1).padStart(2, '0')}</b> / {String(total).padStart(2, '0')}
-            </span>
-            <button onClick={onNext} aria-label="next">›</button>
-        </div>
-    );
-}
-
-function ProjectCard({ project }) {
-    if (!project) return null;
-    return (
-        <div className="project-card">
-            {project.date_label && <span className="project-date">{project.date_label}</span>}
-            <h2 className="project-title">{project.title}</h2>
-            {project.tech?.length > 0 && (
-                <div className="project-tech">
-                    {project.tech.map((t, i) => <span key={`${t}-${i}`} className="tech-chip">{t}</span>)}
-                </div>
-            )}
-            {project.image_url && <img src={project.image_url} alt="" className="project-image" />}
-            <p className="project-desc">{project.description}</p>
-            {(project.repo_url || project.live_url || project.links?.length > 0) && (
-                <div className="project-links">
-                    {project.repo_url && <a href={project.repo_url} target="_blank" rel="noreferrer">Code ↗</a>}
-                    {project.live_url && <a href={project.live_url} target="_blank" rel="noreferrer">Live ↗</a>}
-                    {(project.links ?? []).map((l, i) => (
-                        <a key={`${l.url}-${i}`} href={l.url} target="_blank" rel="noreferrer">{l.label} ↗</a>
-                    ))}
-                </div>
-            )}
-        </div>
-    );
-}
-
-function Projects({ onNavigate }) {
-    const [currentProject, setCurrentProject] = useState(0);
-    const [direction, setDirection] = useState('');
-    const [viewMode, setViewMode] = useState('on');
-    const [isListVisible, setIsListVisible] = useState(true);
+function Projects() {
     const [projects, setProjects] = useState([]);
     const [status, setStatus] = useState('loading');
+    const [current, setCurrent] = useState(0);
 
     useEffect(() => {
         fetchList('projects')
@@ -57,112 +13,75 @@ function Projects({ onNavigate }) {
             .catch(() => setStatus('error'));
     }, []);
 
-    const timersRef = useRef([]);
-    const clearTimers = () => { timersRef.current.forEach(clearTimeout); timersRef.current = []; };
-    useEffect(() => clearTimers, []);
+    useEffect(() => {
+        const onKey = (e) => {
+            const tag = e.target?.tagName;
+            if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                e.preventDefault();
+                setCurrent((c) => Math.min(c + 1, projects.length - 1));
+            }
+            if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                e.preventDefault();
+                setCurrent((c) => Math.max(c - 1, 0));
+            }
+        };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+    }, [projects.length]);
 
-    const totalProjects = projects.length;
-    const getPreviousProject = () => (currentProject === 0 ? totalProjects - 1 : currentProject - 1);
-    const getNextProject = () => (currentProject === totalProjects - 1 ? 0 : currentProject + 1);
-
-    const handlePrevious = () => {
-        if (totalProjects < 2) return;
-        clearTimers();
-        setDirection('slide-right');
-        timersRef.current.push(setTimeout(() => setCurrentProject((p) => (p === 0 ? projects.length - 1 : p - 1)), 300));
-        timersRef.current.push(setTimeout(() => setDirection(''), 600));
-    };
-
-    const handleNext = () => {
-        if (totalProjects < 2) return;
-        clearTimers();
-        setDirection('slide-left');
-        timersRef.current.push(setTimeout(() => setCurrentProject((p) => (p === projects.length - 1 ? 0 : p + 1)), 300));
-        timersRef.current.push(setTimeout(() => setDirection(''), 600));
-    };
-
-    const toggleList = () => setIsListVisible(!isListVisible);
-
-    if (status !== 'ready' || totalProjects === 0) {
-        return (
-            <div className="projects-wrap">
-                <div className="projects-empty">
-                    {status === 'loading' ? 'Loading…' :
-                     status === 'error' ? "Couldn't load projects." : 'No projects yet.'}
-                </div>
-                <div className="menu-in-projects"><Menu onNavigate={onNavigate} /></div>
-            </div>
-        );
-    }
+    const p = projects[current];
+    const label = status === 'ready' && projects.length > 0
+        ? `INDEX OF WORKS — ${String(current + 1).padStart(2, '0')} / ${String(projects.length).padStart(2, '0')}`
+        : 'INDEX OF WORKS';
 
     return (
-        <>
-            <div className="projects-wrap">
-                <span className="page-label">PROJECTS</span>
-                <div className="view-toggle">
-                    <div className={`view-option ${viewMode === 'on' ? 'active' : ''}`} onClick={() => setViewMode('on')}>
-                        <img src={eyeOn} alt="eye on" className="eye-icon" />
-                    </div>
-                    <div className={`view-option ${viewMode === 'off' ? 'active' : ''}`} onClick={() => setViewMode('off')}>
-                        <img src={eyeOff} alt="eye off" className="eye-icon" />
-                    </div>
-                </div>
-
-                {viewMode === 'on' ? (
-                    <>
-                        <div className="menu-in-projects">
-                            <Menu onNavigate={onNavigate} />
-                        </div>
-                        <div className="projectview-container">
-                            <div className="project-carousel">
-                                <div className="project-side project-left" onClick={handlePrevious}>
-                                    <div className="project-preview-content">
-                                        <span className="preview-hint">‹</span>
-                                        <div className="preview-number">{projects[getPreviousProject()]?.title}</div>
-                                    </div>
-                                </div>
-                                <div className={`projectview ${direction}`}>
-                                    <ProjectCard project={projects[currentProject]} />
-                                </div>
-                                <div className="project-side project-right" onClick={handleNext}>
-                                    <div className="project-preview-content">
-                                        <span className="preview-hint">›</span>
-                                        <div className="preview-number">{projects[getNextProject()]?.title}</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <Dock current={currentProject} total={totalProjects}
-                                  onPrev={handlePrevious} onNext={handleNext} />
-                        </div>
-                    </>
-                ) : (
-                    <div className="projects-list-view">
-                        <div className={`hamburger ${!isListVisible ? 'rotated' : ''}`} onClick={toggleList}></div>
-                        {isListVisible && (
-                            <div className="project-list">
-                                {projects.map((p, i) => (
-                                    <div key={p.id}
-                                         className={`project-list-item ${i === currentProject ? 'active' : ''}`}
-                                         onClick={() => setCurrentProject(i)}>
-                                        {p.title}
-                                    </div>
+        <Shell label={label}>
+            {status === 'loading' && <p className="status-line">loading…</p>}
+            {status === 'error' && <p className="status-line">couldn't reach the archive. try again later.</p>}
+            {status === 'ready' && projects.length === 0 && (
+                <p className="status-line">nothing catalogued yet.</p>
+            )}
+            {status === 'ready' && projects.length > 0 && (
+                <div className="ledger">
+                    <ol className="ledger-index scroll-fade">
+                        {projects.map((proj, i) => (
+                            <li key={proj.id}
+                                className={`ledger-row ${i === current ? 'active' : ''}`}
+                                onClick={() => setCurrent(i)}>
+                                <span className="lg-num">{String(i + 1).padStart(2, '0')}</span>
+                                <span className="lg-title">{proj.title}</span>
+                                <span className="lg-date">{proj.date_label}</span>
+                            </li>
+                        ))}
+                    </ol>
+                    <article className="ledger-detail scroll-fade">
+                        <span className="kicker">
+                            <b>{String(current + 1).padStart(2, '0')}</b>
+                            {p.date_label ? ` — ${p.date_label}` : ''}
+                        </span>
+                        <h1 className="detail-title">{p.title}</h1>
+                        {p.tech?.length > 0 && (
+                            <ul className="tag-row">
+                                {p.tech.map((t, i) => <li key={`${t}-${i}`}>{t}</li>)}
+                            </ul>
+                        )}
+                        {p.image_url && <img src={p.image_url} alt="" className="detail-image" />}
+                        <p className="detail-body">{p.description}</p>
+                        {(p.repo_url || p.live_url || p.links?.length > 0) && (
+                            <div className="link-row">
+                                {p.repo_url && <a href={p.repo_url} target="_blank" rel="noreferrer">code ↗</a>}
+                                {p.live_url && <a href={p.live_url} target="_blank" rel="noreferrer">live ↗</a>}
+                                {(p.links ?? []).map((l, i) => (
+                                    <a key={`${l.url}-${i}`} href={l.url} target="_blank" rel="noreferrer">{l.label} ↗</a>
                                 ))}
                             </div>
                         )}
-                        <div className="projectview-list-container">
-                            <div className={`projectview-list ${!isListVisible ? 'expanded' : ''}`}>
-                                <ProjectCard project={projects[currentProject]} />
-                            </div>
-                            <Dock current={currentProject} total={totalProjects}
-                                  onPrev={handlePrevious} onNext={handleNext} />
-                        </div>
-                        <div className="menu-in-projects-list">
-                            <Menu onNavigate={onNavigate} />
-                        </div>
-                    </div>
-                )}
-            </div>
-        </>
+                        <p className="hint-line">↑↓ to browse</p>
+                    </article>
+                </div>
+            )}
+        </Shell>
     );
 }
 

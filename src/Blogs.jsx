@@ -1,13 +1,18 @@
 import { useState, useEffect } from "react";
-import "./style/Blogs.css";
-import Menu from "./Menu.jsx";
+import Shell from "./components/Shell.jsx";
 import { fetchList } from "./lib/content.js";
 
-function Blog({ onNavigate }) {
-    const [isListVisible, setIsListVisible] = useState(true);
-    const [currentBlog, setCurrentBlog] = useState(0);
+function fmtDate(d) {
+    if (!d) return '';
+    const dt = new Date(d);
+    return isNaN(dt) ? String(d)
+        : dt.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+}
+
+function Blog() {
     const [blogs, setBlogs] = useState([]);
-    const [status, setStatus] = useState('loading'); // loading | ready | error
+    const [status, setStatus] = useState('loading');
+    const [current, setCurrent] = useState(0);
 
     useEffect(() => {
         fetchList('blogs')
@@ -15,68 +20,59 @@ function Blog({ onNavigate }) {
             .catch(() => setStatus('error'));
     }, []);
 
-    const totalBlogs = blogs.length;
-    const toggleList = () => setIsListVisible(!isListVisible);
-    const handlePrevious = () => { if (totalBlogs === 0) return; setCurrentBlog((p) => (p === 0 ? totalBlogs - 1 : p - 1)); };
-    const handleNext = () => { if (totalBlogs === 0) return; setCurrentBlog((p) => (p === totalBlogs - 1 ? 0 : p + 1)); };
+    useEffect(() => {
+        const onKey = (e) => {
+            const tag = e.target?.tagName;
+            if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                e.preventDefault();
+                setCurrent((c) => Math.min(c + 1, blogs.length - 1));
+            }
+            if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                e.preventDefault();
+                setCurrent((c) => Math.max(c - 1, 0));
+            }
+        };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+    }, [blogs.length]);
 
-    const blog = blogs[currentBlog];
+    const b = blogs[current];
 
     return (
-        <>
-            <div className="blog-wrap">
-                <span className="page-label">BLOGS</span>
-                <div className={`hamburger ${!isListVisible ? 'rotated' : ''}`} onClick={toggleList}></div>
-                {isListVisible && (
-                    <div className="list">
-                        {blogs.map((b, i) => (
-                            <div key={b.id}
-                                 className={`blogitem ${currentBlog === i ? 'active' : ''}`}
-                                 onClick={() => setCurrentBlog(i)}>
-                                {b.title}
-                            </div>
+        <Shell label="NOTEBOOK — OCCASIONAL WRITING">
+            {status === 'loading' && <p className="status-line">loading…</p>}
+            {status === 'error' && <p className="status-line">couldn't reach the archive. try again later.</p>}
+            {status === 'ready' && blogs.length === 0 && (
+                <p className="status-line">no entries yet — check back soon.</p>
+            )}
+            {status === 'ready' && blogs.length > 0 && (
+                <div className="ledger">
+                    <ol className="ledger-index scroll-fade">
+                        {blogs.map((blog, i) => (
+                            <li key={blog.id}
+                                className={`ledger-row ${i === current ? 'active' : ''}`}
+                                onClick={() => setCurrent(i)}>
+                                <span className="lg-num">{String(i + 1).padStart(2, '0')}</span>
+                                <span className="lg-title">{blog.title}</span>
+                                <span className="lg-date">{fmtDate(blog.published_at)}</span>
+                            </li>
                         ))}
-                    </div>
-                )}
-                <div className="blogview-container">
-                    <div className={`blogview ${!isListVisible ? 'expanded' : ''}`}>
-                        <div className="blog-content">
-                            {status === 'loading' && <p>Loading…</p>}
-                            {status === 'error' && <p>Couldn't load blogs. Try again later.</p>}
-                            {status === 'ready' && !blog && <p>No blogs yet — check back soon.</p>}
-                            {blog && (
-                                <article className="blog-article">
-                                    <h2>{blog.title}</h2>
-                                    {blog.published_at && (
-                                        <span className="blog-date">
-                                            {new Date(blog.published_at).toLocaleDateString('en-US', {
-                                                month: 'long', day: 'numeric', year: 'numeric',
-                                            })}
-                                        </span>
-                                    )}
-                                    {blog.cover_image_url && (
-                                        <img src={blog.cover_image_url} alt="" className="blog-cover" />
-                                    )}
-                                    {(blog.content ?? '').split(/\n{2,}/).map((para, i) => (
-                                        <p key={i}>{para}</p>
-                                    ))}
-                                </article>
-                            )}
+                    </ol>
+                    <article className="ledger-detail scroll-fade">
+                        <h1 className="detail-title">{b.title}</h1>
+                        <span className="reader-date">{fmtDate(b.published_at)}</span>
+                        {b.cover_image_url && <img src={b.cover_image_url} alt="" className="reader-cover" />}
+                        <div className="reader-body">
+                            {(b.content ?? '').split(/\n{2,}/).map((para, i) => (
+                                <p key={i}>{para}</p>
+                            ))}
                         </div>
-                    </div>
-                    <div className="dock">
-                        <button onClick={handlePrevious} aria-label="previous">‹</button>
-                        <span className="dock-counter">
-                            <b>{totalBlogs ? String(currentBlog + 1).padStart(2, '0') : '00'}</b> / {String(totalBlogs).padStart(2, '0')}
-                        </span>
-                        <button onClick={handleNext} aria-label="next">›</button>
-                    </div>
+                        <p className="hint-line">↑↓ to browse</p>
+                    </article>
                 </div>
-                <div className="menu-in-blog">
-                    <Menu onNavigate={onNavigate} />
-                </div>
-            </div>
-        </>
+            )}
+        </Shell>
     );
 }
 
