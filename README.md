@@ -15,14 +15,21 @@ React + Vite portfolio with a radial menu, driven by Supabase, deployed on Verce
    Plain `npm run dev` works for UI-only work but does not serve `/api`.
 
 ## Content management
-Open `/admin`, enter `ADMIN_PASSWORD`. Add/edit/delete/reorder/hide rows per section
-(projects, blogs, experiences, languages, skills, hero images, profile). Writes go
-through `/api/admin/*` (service-role key, server-side only) — the browser never holds
-a write-capable key.
+Two ways in, same password (`ADMIN_PASSWORD`):
+- **Secret combo**: type `pruh` anywhere on the site (or press `Ctrl+Shift+A`) → enter
+  the password → a floating "✎ edit site" chip appears and stays for the session.
+- **Direct**: open `/admin` and log in.
+
+Add/edit/delete/reorder/hide rows per section (projects, blogs, experiences,
+languages, skills, hero images, profile). Projects support free-form links —
+one per line as `Label | https://url` — rendered as buttons on the project card.
+Writes go through `/api/admin/*` (service-role key, server-side only) — the browser
+never holds a write-capable key.
 
 ## Database
 Schema: `supabase/schema.sql` · Seed: `supabase/seed.sql` — run both in the Supabase
-SQL editor.
+SQL editor. Existing databases also need `supabase/migration-002-project-links.sql`
+(adds the `links` column to projects).
 
 ## Env vars (set the same in Vercel → Project Settings → Environment Variables)
 | Var | Where | Purpose |

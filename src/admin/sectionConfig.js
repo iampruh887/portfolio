@@ -1,4 +1,5 @@
-// Field types: text | textarea | number | checkbox | date | image | tags | select
+// Field types: text | textarea | number | checkbox | date | image | tags | select | links
+// links = one per line, "Label | https://url"
 export const SECTIONS = {
   profile: {
     label: 'Profile',
@@ -24,6 +25,7 @@ export const SECTIONS = {
       { name: 'tech', type: 'tags' },
       { name: 'repo_url', type: 'text' },
       { name: 'live_url', type: 'text' },
+      { name: 'links', type: 'links' },
       { name: 'image_url', type: 'image' },
       { name: 'date_label', type: 'text' },
       { name: 'featured', type: 'checkbox' },

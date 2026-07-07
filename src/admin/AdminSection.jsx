@@ -25,6 +25,12 @@ function Field({ field, value, onChange }) {
       return <input type="text" placeholder="comma, separated"
                     value={Array.isArray(value) ? value.join(', ') : (value ?? '')}
                     onChange={(e) => set(e.target.value)} />
+    case 'links':
+      return <textarea rows={3} placeholder={'one per line:\nDemo | https://example.com'}
+                       value={Array.isArray(value)
+                         ? value.map((l) => `${l.label} | ${l.url}`).join('\n')
+                         : (value ?? '')}
+                       onChange={(e) => set(e.target.value)} />
     case 'image':
       return (
         <div className="image-field">
@@ -49,6 +55,16 @@ function normalize(fields, form) {
   for (const f of fields) {
     if (f.type === 'tags' && typeof out[f.name] === 'string') {
       out[f.name] = out[f.name].split(',').map((s) => s.trim()).filter(Boolean)
+    }
+    if (f.type === 'links' && typeof out[f.name] === 'string') {
+      out[f.name] = out[f.name]
+        .split('\n')
+        .map((line) => {
+          const [label, ...rest] = line.split('|')
+          const url = rest.join('|').trim()
+          return { label: label.trim(), url }
+        })
+        .filter((l) => l.label && l.url)
     }
     if (f.type === 'date' && out[f.name] === '') out[f.name] = null
   }

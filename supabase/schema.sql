@@ -25,6 +25,7 @@ create table if not exists projects (
   tech text[] not null default '{}',
   repo_url text not null default '',
   live_url text not null default '',
+  links jsonb not null default '[]',
   image_url text not null default '',
   date_label text not null default '',
   featured boolean not null default false,

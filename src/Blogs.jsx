@@ -2,11 +2,6 @@ import { useState, useEffect } from "react";
 import "./style/Blogs.css";
 import Menu from "./Menu.jsx";
 import { fetchList } from "./lib/content.js";
-import commentIcon from "./assets/comment.png";
-import chevronBackward from "./assets/chevron_backward.png";
-import fullscreenIcon from "./assets/fullscreen.png";
-import chevronForward from "./assets/chevron_forward.png";
-import favoriteIcon from "./assets/favorite.png";
 
 function Blog({ onNavigate }) {
     const [isListVisible, setIsListVisible] = useState(true);
@@ -30,6 +25,7 @@ function Blog({ onNavigate }) {
     return (
         <>
             <div className="blog-wrap">
+                <span className="page-label">BLOGS</span>
                 <div className={`hamburger ${!isListVisible ? 'rotated' : ''}`} onClick={toggleList}></div>
                 {isListVisible && (
                     <div className="list">
@@ -68,12 +64,12 @@ function Blog({ onNavigate }) {
                             )}
                         </div>
                     </div>
-                    <div className="icon-bar">
-                        <img src={commentIcon} alt="comment" className="icon" />
-                        <img src={chevronBackward} alt="backward" className="icon" onClick={handlePrevious} />
-                        <img src={fullscreenIcon} alt="fullscreen" className="icon" />
-                        <img src={chevronForward} alt="forward" className="icon" onClick={handleNext} />
-                        <img src={favoriteIcon} alt="favorite" className="icon" />
+                    <div className="dock">
+                        <button onClick={handlePrevious} aria-label="previous">‹</button>
+                        <span className="dock-counter">
+                            <b>{totalBlogs ? String(currentBlog + 1).padStart(2, '0') : '00'}</b> / {String(totalBlogs).padStart(2, '0')}
+                        </span>
+                        <button onClick={handleNext} aria-label="next">›</button>
                     </div>
                 </div>
                 <div className="menu-in-blog">

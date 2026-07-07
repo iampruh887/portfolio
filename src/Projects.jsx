@@ -2,13 +2,20 @@ import { useState, useEffect, useRef } from "react";
 import "./style/Projects.css";
 import Menu from "./Menu.jsx";
 import { fetchList } from "./lib/content.js";
-import commentIcon from "./assets/comment.png";
-import chevronBackward from "./assets/chevron_backward.png";
-import fullscreenIcon from "./assets/fullscreen.png";
-import chevronForward from "./assets/chevron_forward.png";
-import favoriteIcon from "./assets/favorite.png";
 import eyeOn from "./assets/Eye.png";
 import eyeOff from "./assets/Eye off.png";
+
+function Dock({ current, total, onPrev, onNext }) {
+    return (
+        <div className="dock">
+            <button onClick={onPrev} aria-label="previous">‹</button>
+            <span className="dock-counter">
+                <b>{String(current + 1).padStart(2, '0')}</b> / {String(total).padStart(2, '0')}
+            </span>
+            <button onClick={onNext} aria-label="next">›</button>
+        </div>
+    );
+}
 
 function ProjectCard({ project }) {
     if (!project) return null;
@@ -23,10 +30,13 @@ function ProjectCard({ project }) {
             )}
             {project.image_url && <img src={project.image_url} alt="" className="project-image" />}
             <p className="project-desc">{project.description}</p>
-            {(project.repo_url || project.live_url) && (
+            {(project.repo_url || project.live_url || project.links?.length > 0) && (
                 <div className="project-links">
                     {project.repo_url && <a href={project.repo_url} target="_blank" rel="noreferrer">Code ↗</a>}
                     {project.live_url && <a href={project.live_url} target="_blank" rel="noreferrer">Live ↗</a>}
+                    {(project.links ?? []).map((l, i) => (
+                        <a key={`${l.url}-${i}`} href={l.url} target="_blank" rel="noreferrer">{l.label} ↗</a>
+                    ))}
                 </div>
             )}
         </div>
@@ -88,6 +98,7 @@ function Projects({ onNavigate }) {
     return (
         <>
             <div className="projects-wrap">
+                <span className="page-label">PROJECTS</span>
                 <div className="view-toggle">
                     <div className={`view-option ${viewMode === 'on' ? 'active' : ''}`} onClick={() => setViewMode('on')}>
                         <img src={eyeOn} alt="eye on" className="eye-icon" />
@@ -120,13 +131,8 @@ function Projects({ onNavigate }) {
                                     </div>
                                 </div>
                             </div>
-                            <div className="project-icon-bar">
-                                <img src={commentIcon} alt="comment" className="project-icon" />
-                                <img src={chevronBackward} alt="backward" className="project-icon" onClick={handlePrevious} />
-                                <img src={fullscreenIcon} alt="fullscreen" className="project-icon" />
-                                <img src={chevronForward} alt="forward" className="project-icon" onClick={handleNext} />
-                                <img src={favoriteIcon} alt="favorite" className="project-icon" />
-                            </div>
+                            <Dock current={currentProject} total={totalProjects}
+                                  onPrev={handlePrevious} onNext={handleNext} />
                         </div>
                     </>
                 ) : (
@@ -147,13 +153,8 @@ function Projects({ onNavigate }) {
                             <div className={`projectview-list ${!isListVisible ? 'expanded' : ''}`}>
                                 <ProjectCard project={projects[currentProject]} />
                             </div>
-                            <div className="project-list-icon-bar">
-                                <img src={commentIcon} alt="comment" className="project-icon" />
-                                <img src={chevronBackward} alt="backward" className="project-icon" onClick={handlePrevious} />
-                                <img src={fullscreenIcon} alt="fullscreen" className="project-icon" />
-                                <img src={chevronForward} alt="forward" className="project-icon" onClick={handleNext} />
-                                <img src={favoriteIcon} alt="favorite" className="project-icon" />
-                            </div>
+                            <Dock current={currentProject} total={totalProjects}
+                                  onPrev={handlePrevious} onNext={handleNext} />
                         </div>
                         <div className="menu-in-projects-list">
                             <Menu onNavigate={onNavigate} />
