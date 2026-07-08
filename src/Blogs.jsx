@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Shell from "./components/Shell.jsx";
+import RingNav from "./components/RingNav.jsx";
 import { fetchList } from "./lib/content.js";
 
 function fmtDate(d) {
@@ -59,6 +60,7 @@ function Blog() {
                             </li>
                         ))}
                     </ol>
+                    <RingNav />
                     <article className="ledger-detail scroll-fade">
                         <h1 className="detail-title">{b.title}</h1>
                         <span className="reader-date">{fmtDate(b.published_at)}</span>

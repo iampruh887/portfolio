@@ -118,8 +118,13 @@
   flex: 1;
   min-height: 0;
   display: grid;
-  grid-template-columns: minmax(300px, 385px) 1fr;
+  --ring-col: 96px;
+  grid-template-columns: minmax(280px, 1fr) var(--ring-col) minmax(0, 1.35fr);
+  transition: grid-template-columns 0.5s cubic-bezier(0.2, 0.8, 0.3, 1);
+  align-items: stretch;
 }
+
+html.nav-open .ledger { --ring-col: 372px; }
 
 .ledger-index {
   list-style: none;
@@ -170,7 +175,8 @@
 .ledger-row.active .lg-title { color: var(--red); }
 
 .ledger-detail {
-  padding: 6px 8px 40px 44px;
+  padding: 6px 8px 40px 34px;
+  border-left: 0.5px solid var(--hairline-strong);
   max-height: calc(100vh - 235px);
 }
 
@@ -245,13 +251,14 @@
 
 @media (max-width: 900px) {
   .ledger { grid-template-columns: 1fr; }
+  .ring-nav { display: none; }
   .ledger-index {
     border-right: none;
     border-bottom: 0.5px solid var(--hairline-strong);
     padding: 0 0 18px;
     max-height: 36vh;
   }
-  .ledger-detail { padding: 26px 0 40px; max-height: none; }
+  .ledger-detail { padding: 26px 0 40px; border-left: none; max-height: none; }
   .masthead { flex-wrap: wrap; gap: 10px 18px; }
   .masthead-label { display: none; }
 }
@@ -364,3 +371,53 @@
   .home-stamp { display: none; }
   .home-foot { flex-direction: column; gap: 6px; }
 }
+
+/* ---------- ring nav: the menu owns a column; hover breathes it open ---------- */
+
+.ring-nav {
+  align-self: center;
+  justify-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ring-nav-hub {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: var(--paper-2);
+  border: 1.4px solid var(--ink);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 25px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(43, 43, 40, 0.16);
+  transition: border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ring-nav-hub:hover {
+  border-color: var(--red);
+  color: var(--red);
+  box-shadow: 0 6px 24px rgba(43, 43, 40, 0.26);
+}
+
+.ring-nav-ring {
+  width: 340px;
+  height: 340px;
+  animation: navBloom 0.45s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+.ring-nav-ring .wrapper { height: auto; }
+.ring-nav-ring .circle { width: 340px; height: 340px; }
+.ring-nav-ring .walkthrough { font-size: 56px; }
+
+@keyframes navBloom {
+  from { transform: scale(0.18); opacity: 0; }
+}
+
+/* the sheet never shows a scrollbar */
+html { scrollbar-width: none; }
+body::-webkit-scrollbar, html::-webkit-scrollbar { width: 0; height: 0; }

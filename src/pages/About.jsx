@@ -1,8 +1,19 @@
 import { useEffect, useState } from 'react'
-import Menu from '../Menu.jsx'
+import Shell from '../components/Shell.jsx'
+import RingNav from '../components/RingNav.jsx'
 import ContributionGraph from '../components/ContributionGraph.jsx'
 import { fetchList, fetchProfile } from '../lib/content.js'
 import '../style/About.css'
+
+const CATEGORY_ORDER = ['language', 'framework', 'library', 'ai_tool', 'dev_tool', 'other']
+const CATEGORY_LABELS = {
+  language: 'programming',
+  framework: 'frameworks',
+  library: 'libraries',
+  ai_tool: 'ai / agents',
+  dev_tool: 'tooling',
+  other: 'misc',
+}
 
 function Stars({ rating }) {
   return (
@@ -23,13 +34,13 @@ function HeroRotator({ images }) {
     return () => clearInterval(t)
   }, [images])
   if (images.length === 0) {
-    return <div className="hero-placeholder">this image will keep changing</div>
+    return <div className="ab-fig-placeholder">photograph pending</div>
   }
   const img = images[index]
   return (
-    <figure className="hero-figure">
+    <figure className="ab-fig">
       <img src={img.image_url} alt={img.caption || ''} />
-      {img.caption && <figcaption>{img.caption}</figcaption>}
+      <figcaption>FIG. {String(index + 1).padStart(2, '0')}{img.caption ? ` — ${img.caption}` : ''}</figcaption>
     </figure>
   )
 }
@@ -44,95 +55,96 @@ function formatRange(exp) {
   return `${fmt(exp.start_date)} – ${exp.is_current || !exp.end_date ? 'Present' : fmt(exp.end_date)}`
 }
 
-function About({ onNavigate }) {
+function About() {
   const [data, setData] = useState(null)
   const [error, setError] = useState(false)
 
   useEffect(() => {
     Promise.all([
       fetchProfile(),
-      fetchList('projects'),
       fetchList('experiences'),
       fetchList('languages'),
       fetchList('skills'),
       fetchList('hero_images'),
     ])
-      .then(([profile, projects, experiences, languages, skills, heroImages]) =>
-        setData({ profile, projects, experiences, languages, skills, heroImages }))
+      .then(([profile, experiences, languages, skills, heroImages]) =>
+        setData({ profile, experiences, languages, skills, heroImages }))
       .catch(() => setError(true))
   }, [])
 
-  if (error) return <div className="about-status">Couldn't load this page.</div>
-  if (!data) return <div className="about-status">Loading…</div>
-
-  const { profile, projects, experiences, languages, skills, heroImages } = data
+  const skillGroups = data
+    ? CATEGORY_ORDER
+        .map((c) => [c, data.skills.filter((s) => s.category === c)])
+        .filter(([, items]) => items.length > 0)
+    : []
 
   return (
-    <div className="about-wrap">
-      <div className="about-grid">
-        <section className="about-panel contrib-panel">
-          <ContributionGraph username={profile?.github_username} />
-          <span className="panel-note">learn how we count contributions</span>
-        </section>
+    <Shell label="PERSONNEL RECORD — SHT 04">
+      {error && <p className="status-line">couldn't reach the archive. try again later.</p>}
+      {!error && !data && <p className="status-line">loading…</p>}
+      {data && (
+        <div className="about-sheet">
+          <header className="ab-head">
+            <div className="ab-id">
+              {data.profile?.avatar_url
+                ? <img className="ab-avatar" src={data.profile.avatar_url} alt={data.profile?.name || 'portrait'} />
+                : <div className="ab-avatar ab-avatar-blank">{(data.profile?.name || '?').slice(0, 1)}</div>}
+              <div className="ab-id-text">
+                <h1 className="ab-name">{data.profile?.name}</h1>
+                <p className="ab-tag">{data.profile?.tagline}</p>
+                {data.profile?.bio && <p className="ab-bio">{data.profile.bio}</p>}
+                {data.profile?.education && <p className="ab-edu">{data.profile.education}</p>}
+              </div>
+            </div>
+            <HeroRotator images={data.heroImages} />
+          </header>
 
-        <section className="about-panel hero-panel">
-          <HeroRotator images={heroImages} />
-        </section>
+          <section className="ab-section">
+            <div className="ab-kicker"><b>01</b> — CONTRIBUTIONS</div>
+            <ContributionGraph username={data.profile?.github_username} />
+          </section>
 
-        <div className="about-menu">
-          <Menu onNavigate={onNavigate} />
+          <div className="ab-cols">
+            <section className="ab-section">
+              <div className="ab-kicker"><b>02</b> — EXPERIENCE</div>
+              {data.experiences.map((e) => (
+                <div className="ab-exp-row" key={e.id}>
+                  <div className="ab-exp-main">
+                    <span className="ab-exp-role">{e.role}{e.org ? ` @ ${e.org}` : ''}</span>
+                    <span className="ab-exp-dates">{formatRange(e)}</span>
+                  </div>
+                  {e.description && <p className="ab-exp-desc">{e.description}</p>}
+                </div>
+              ))}
+            </section>
+
+            <RingNav />
+
+            <div className="ab-side">
+              <section className="ab-section">
+                <div className="ab-kicker"><b>03</b> — SPOKEN</div>
+                {data.languages.map((l) => (
+                  <div className="ab-lang-row" key={l.id}>
+                    <span>{l.name}</span>
+                    <Stars rating={l.rating} />
+                  </div>
+                ))}
+              </section>
+
+              <section className="ab-section">
+                <div className="ab-kicker"><b>04</b> — STACK</div>
+                {skillGroups.map(([cat, items]) => (
+                  <div className="ab-stack-row" key={cat}>
+                    <span className="ab-stack-cat">{CATEGORY_LABELS[cat]}</span>
+                    <span className="ab-stack-items">{items.map((s) => s.name).join(' · ')}</span>
+                  </div>
+                ))}
+              </section>
+            </div>
+          </div>
         </div>
-
-        <section className="about-panel works-panel">
-          <h3>works</h3>
-          <ul className="works-list">
-            {projects.map((p) => (
-              <li key={p.id}>
-                <span className="work-title">{p.title}</span>
-                {p.tech?.length > 0 && <span className="work-tech">{p.tech.join(' · ')}</span>}
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section className="about-panel identity-panel">
-          {profile?.avatar_url
-            ? <img className="avatar" src={profile.avatar_url} alt={profile?.name || 'avatar'} />
-            : <div className="avatar avatar-placeholder">{(profile?.name || '?').slice(0, 1)}</div>}
-          <h2>{profile?.name}</h2>
-          <p className="tagline">{profile?.tagline}</p>
-          <p className="education">{profile?.education}</p>
-          <div className="skills-grid">
-            {skills.map((s) => (
-              <div className="skill" key={s.id} title={s.name}>
-                {s.icon_slug
-                  ? <img src={`https://cdn.simpleicons.org/${s.icon_slug}`} alt={s.name} loading="lazy" />
-                  : <span className="skill-text">{s.name}</span>}
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="about-panel right-panel">
-          <div className="languages">
-            {languages.map((l) => (
-              <div className="language-row" key={l.id}>
-                <span>{l.name}</span>
-                <Stars rating={l.rating} />
-              </div>
-            ))}
-          </div>
-          <div className="experience">
-            {experiences.map((e) => (
-              <div className="exp-row" key={e.id}>
-                <div className="exp-role">{e.role}{e.org ? ` @ ${e.org}` : ''}</div>
-                <div className="exp-meta">{formatRange(e)}</div>
-              </div>
-            ))}
-          </div>
-        </section>
-      </div>
-    </div>
+      )}
+    </Shell>
   )
 }
 

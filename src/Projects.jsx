@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Shell from "./components/Shell.jsx";
+import RingNav from "./components/RingNav.jsx";
 import { fetchList } from "./lib/content.js";
 
 function Projects() {
@@ -55,6 +56,7 @@ function Projects() {
                             </li>
                         ))}
                     </ol>
+                    <RingNav />
                     <article className="ledger-detail scroll-fade">
                         <span className="kicker">
                             <b>{String(current + 1).padStart(2, '0')}</b>
