@@ -1,43 +1,69 @@
 .admin-wrap {
   min-height: 100vh;
-  background: #1c1c1e;
-  color: #eee;
-  padding: 24px;
+  background: transparent;
+  color: #2B2B28;
+  padding: 40px 24px;
   box-sizing: border-box;
-  font-family: system-ui, sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 
 .admin-login { max-width: 320px; margin: 20vh auto; display: flex; flex-direction: column; gap: 12px; }
-.admin-header { display: flex; justify-content: space-between; align-items: center; max-width: 900px; margin: 0 auto; }
+.admin-login h1 { font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; margin: 0 0 6px; }
+.admin-login input {
+  background: #fff; border: 1.4px solid #2B2B28; padding: 10px 14px;
+  color: #2B2B28; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 14px;
+}
+.admin-login input:focus { outline: none; border-color: #C8321E; }
+
+.admin-header {
+  display: flex; justify-content: space-between; align-items: center;
+  max-width: 900px; margin: 0 auto;
+  border-bottom: 1.4px solid #2B2B28; padding-bottom: 12px;
+}
+.admin-header h1 { font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; margin: 0; }
+
 .admin-tabs { display: flex; flex-wrap: wrap; gap: 8px; max-width: 900px; margin: 16px auto; }
-.admin-tabs button.active { background: #F7FF00; color: #000; }
+.admin-tabs button.active { background: #C8321E; color: #fff; border-color: #C8321E; }
 
 .admin-section { max-width: 900px; margin: 0 auto; }
 .admin-rows { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
-.admin-rows li { background: #2a2a2e; border-radius: 8px; padding: 10px 14px; }
+.admin-rows li { background: #FBF9F2; border: 0.5px solid rgba(43, 43, 40, 0.45); padding: 10px 14px; }
 .admin-rows li.unpublished { opacity: 0.45; }
 .admin-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .row-title { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .row-actions { display: flex; gap: 6px; flex: 0 0 auto; }
 
-.row-form { display: flex; flex-direction: column; gap: 10px; background: #2a2a2e; border-radius: 8px; padding: 14px; margin-top: 12px; }
-.row-form label { display: grid; grid-template-columns: 140px 1fr; align-items: start; gap: 10px; font-size: 14px; }
+.row-form {
+  display: flex; flex-direction: column; gap: 10px;
+  background: #FBF9F2; border: 0.5px solid rgba(43, 43, 40, 0.45);
+  padding: 14px; margin-top: 12px;
+}
+.row-form label {
+  display: grid; grid-template-columns: 140px 1fr; align-items: start; gap: 10px;
+  font-size: 13px; font-family: 'IBM Plex Mono', ui-monospace, monospace; color: #6b675c;
+}
 .row-form input[type="text"], .row-form input[type="number"], .row-form input[type="date"],
 .row-form textarea, .row-form select {
-  width: 100%; box-sizing: border-box; background: #1c1c1e; color: #eee;
-  border: 1px solid #444; border-radius: 6px; padding: 8px;
+  width: 100%; box-sizing: border-box; background: #fff; color: #2B2B28;
+  border: 1px solid rgba(43, 43, 40, 0.45); padding: 8px;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 14px;
+}
+.row-form input:focus, .row-form textarea:focus, .row-form select:focus {
+  outline: none; border-color: #C8321E;
 }
 .form-actions { display: flex; gap: 8px; }
 
 .admin-wrap button {
-  background: #3a3a3e; color: #eee; border: none; border-radius: 6px;
-  padding: 6px 14px; cursor: pointer; font-size: 14px;
+  background: transparent; color: #2B2B28; border: 1px solid rgba(43, 43, 40, 0.6);
+  padding: 6px 14px; cursor: pointer; font-size: 13px;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
 }
-.admin-wrap button:hover { background: #4a4a4e; }
+.admin-wrap button:hover { background: rgba(43, 43, 40, 0.06); }
 .admin-wrap button:disabled { opacity: 0.4; cursor: default; }
-.admin-wrap button.danger { background: #7a1f1f; }
-.admin-wrap button.secondary { background: transparent; border: 1px solid #555; }
+.admin-wrap button.danger { color: #C8321E; border-color: #C8321E; }
+.admin-wrap button.danger:hover { background: rgba(200, 50, 30, 0.08); }
+.admin-wrap button.secondary { border-style: dotted; }
 
 .image-field { display: flex; flex-direction: column; gap: 6px; }
-.image-preview { max-width: 160px; border-radius: 6px; }
-.admin-error { color: #ff7b72; }
+.image-preview { max-width: 160px; border: 0.5px solid rgba(43, 43, 40, 0.45); padding: 4px; background: #fff; }
+.admin-error { color: #C8321E; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 13px; }

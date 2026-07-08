@@ -44,7 +44,6 @@ body {
 
 .slice-group.hovered {
   transform: scale(1.12);
-  filter: brightness(1.3) drop-shadow(0 10px 20px rgba(0,0,0,0.3));
 }
 
 .wrapper.navigating .slice-group,
@@ -55,7 +54,7 @@ body {
 }
 
 .slice-text {
-  fill: black;
+  fill: #2B2B28;
   font-size: 10px;
   font-weight: bold;
   font-family: "Bitcount Grid Double Ink", system-ui;
@@ -64,16 +63,22 @@ body {
   text-rendering: optimizeSpeed;
 }
 
-.slice1 {
-  fill: #F7FF00;
+/* drafting linework: paper wedges, ink outlines */
+.slice {
+  fill: #FBF9F2;
+  stroke: #2B2B28;
+  stroke-width: 0.4;
+  transition: fill 0.2s ease, stroke 0.2s ease;
 }
 
-.slice2 {
-  fill: #F7FF00;
+.slice-group.hovered .slice {
+  fill: #ffffff;
+  stroke: #C8321E;
+  stroke-width: 0.7;
 }
 
-.slice3 {
-  fill: #F7FF00;
+.slice-group.hovered .slice-text {
+  fill: #C8321E;
 }
 
 .walkthrough {
@@ -84,24 +89,27 @@ body {
 
   height: 60%;
   width: 60%;
-  background: black;
+  background: #F5F2E9;
+  border: 2px solid #2B2B28;
+  box-sizing: border-box;
   border-radius: 50%;
-  
+
   display: flex;
   justify-content: center;
   align-items: center;
-  color: white;
+  color: #2B2B28;
   z-index: 10;
   font-family: "Bitcount Grid Double Ink", system-ui;
   font-optical-sizing: auto;
   font-size: 90px;
-  
-  transition: box-shadow 0.3s ease;
+
+  transition: color 0.3s ease, border-color 0.3s ease;
   cursor: pointer;
 }
 
 .walkthrough:hover {
-  box-shadow: inset 0 0 30px 10px rgba(193, 228, 16, 0.5);
+  color: #C8321E;
+  border-color: #C8321E;
 }
 
 

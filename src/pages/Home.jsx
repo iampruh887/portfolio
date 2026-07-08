@@ -21,6 +21,11 @@ function Home({ onNavigate }) {
           <a href="https://linkedin.com/in/nishant-prabhat" target="_blank" rel="noreferrer">linkedin</a>
         </span>
       </footer>
+      <div className="home-stamp" aria-hidden="true">
+        <div>NISHANT PRABHAT — PORTFOLIO</div>
+        <div>DRW <b>NP-001</b> · SHT 01 OF 04</div>
+        <div>SCALE 1:1 · REV B</div>
+      </div>
     </div>
   )
 }
