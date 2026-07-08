@@ -19,7 +19,7 @@ function App() {
         <Route path="/" element={<Home onNavigate={handleNavigate} />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/blogs" element={<Blog />} />
-        <Route path="/about" element={<About onNavigate={handleNavigate} />} />
+        <Route path="/about" element={<About />} />
         <Route path="/admin" element={
           <Suspense fallback={<div style={{ color: '#e9e4d6', padding: 40 }}>Loading…</div>}>
             <Admin />

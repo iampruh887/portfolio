@@ -62,7 +62,7 @@
 
 .gate-chip {
   position: fixed;
-  right: 24px;
+  left: 24px;
   bottom: 24px;
   z-index: 999;
   display: flex;
