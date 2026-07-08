@@ -250,6 +250,7 @@ html.nav-open .ledger { --ring-col: 372px; }
 }
 
 @media (max-width: 900px) {
+  .shell { padding: 16px 22px 0; }
   .ledger { grid-template-columns: 1fr; }
   .ring-nav { display: none; }
   .ledger-index {
@@ -261,6 +262,8 @@ html.nav-open .ledger { --ring-col: 372px; }
   .ledger-detail { padding: 26px 0 40px; border-left: none; max-height: none; }
   .masthead { flex-wrap: wrap; gap: 10px 18px; }
   .masthead-label { display: none; }
+  .detail-title { font-size: clamp(30px, 8vw, 40px); }
+  .footrail { flex-direction: column; gap: 4px; }
 }
 
 /* ---------- reader (blogs body) ---------- */
@@ -367,9 +370,44 @@ html.nav-open .ledger { --ring-col: 372px; }
 .home-stamp div:first-child { border-top: none; color: var(--graphite); }
 .home-stamp b { font-weight: 600; color: var(--red); }
 
+/* mobile sheet index — replaces the ring on phones */
+.home-mobile-nav { display: none; }
+
+.home-mobile-nav a {
+  font-family: var(--serif);
+  font-size: 34px;
+  color: var(--ink);
+  text-decoration: none;
+  padding: 18px 4px;
+  border-bottom: 0.5px solid var(--hairline-strong);
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.home-mobile-nav a:first-child { border-top: 1.4px solid var(--ink); }
+.home-mobile-nav a:last-child { border-bottom: 1.4px solid var(--ink); }
+.home-mobile-nav a:active { color: var(--red); }
+
+.home-mobile-nav a span {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--red);
+  letter-spacing: 1px;
+}
+
 @media (max-width: 700px) {
   .home-stamp { display: none; }
-  .home-foot { flex-direction: column; gap: 6px; }
+  .home-foot { flex-direction: column; gap: 6px; left: 24px; right: 24px; bottom: 28px; }
+  .home-mast { left: 24px; top: 30px; right: 24px; }
+  .home-menu { display: none; }
+  .home-mobile-nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    padding: 120px 24px 140px;
+  }
 }
 
 /* ---------- ring nav: the menu owns a column; hover breathes it open ---------- */
@@ -416,6 +454,10 @@ html.nav-open .ledger { --ring-col: 372px; }
 
 @keyframes navBloom {
   from { transform: scale(0.18); opacity: 0; }
+}
+
+@media (max-width: 900px) {
+  .ring-nav { display: none; }
 }
 
 /* the sheet never shows a scrollbar */

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import Menu from '../Menu.jsx'
 import '../style/theme.css'
 
@@ -11,6 +12,11 @@ function Home({ onNavigate }) {
       <div className="home-menu">
         <Menu onNavigate={onNavigate} />
       </div>
+      <nav className="home-mobile-nav" aria-label="site index">
+        <Link to="/projects"><span>01</span> projects</Link>
+        <Link to="/blogs"><span>02</span> blogs</Link>
+        <Link to="/about"><span>03</span> about me</Link>
+      </nav>
       <footer className="home-foot">
         <span>B.Tech CSE — IIIT Guwahati</span>
         <span>
