@@ -24,13 +24,13 @@ export function makeRocket(x, y) {
   }
 }
 
-export function makeEnemy(type, x, y, label) {
+export function makeEnemy(type, x, y, label, powerupType = null) {
   const spec = ENEMIES[type]
   return {
     kind: 'enemy', type, art: label ? labelledArt(spec.art, label) : spec.art,
     color: spec.color, x, y, hp: spec.hp, spec,
     t: Math.random() * Math.PI * 2, fireT: spec.fireRate ? Math.random() * spec.fireRate : 0,
-    baseX: x, label: label || null,
+    baseX: x, label: label || null, powerupType,
   }
 }
 

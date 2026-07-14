@@ -14,6 +14,7 @@ const FIRE_COOLDOWN = 0.22
 const RAPID_COOLDOWN = 0.09
 const MAX_PARTICLES = 260
 const MAX_ENEMY_BULLETS = 80
+const POWERUP_TYPES = ['rapid', 'shield', 'spread']
 
 export class Engine {
   constructor({ width, height, cw = 10, lh = 18, onEvent = () => {} }) {
@@ -138,7 +139,12 @@ export class Engine {
       // every other ship carries a real portfolio word (the content morph)
       const label = this.labels.length && this.spawnTotal % 2 === 0
         ? this.labels[this.spawnTotal % this.labels.length] : null
-      this.enemies.push(makeEnemy(s.type, s.x, s.y, label))
+      // Every fifth ship is a glowing carrier so powerups are part of the
+      // encounter design, not just a rare random event.
+      const powerupType = this.spawnTotal % 5 === 4
+        ? POWERUP_TYPES[this.spawnTotal % POWERUP_TYPES.length]
+        : null
+      this.enemies.push(makeEnemy(s.type, s.x, s.y, label, powerupType))
       this.pi++
       this.spawnTotal++
     }
@@ -254,8 +260,9 @@ export class Engine {
     this.kills += 1
     this.killsSinceDiscovery += 1
     this.emit('score', this.score)
-    if (Math.random() < 0.12) {
-      this.powerups.push(makePowerup(e.x, e.y, ['rapid', 'shield', 'spread'][Math.floor(Math.random() * 3)]))
+    if (e.powerupType || Math.random() < 0.24) {
+      const type = e.powerupType || POWERUP_TYPES[Math.floor(Math.random() * POWERUP_TYPES.length)]
+      this.powerups.push(makePowerup(e.x, e.y, type))
     }
     if (this.killsSinceDiscovery >= KILLS_PER_DISCOVERY && this.state === 'playing') {
       this.killsSinceDiscovery = 0

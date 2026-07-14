@@ -65,7 +65,20 @@ export class Renderer {
     for (const e of world.enemies) {
       ctx.shadowColor = e.color
       ctx.fillStyle = e.color
+      if (e.powerupType) {
+        ctx.shadowBlur = 14
+        ctx.strokeStyle = powerupColor(e.powerupType)
+        ctx.beginPath()
+        ctx.arc(e.x + spriteCols(e.art) * ctx.measureText('0').width / 2, e.y + e.art.length * this.fontPx * 0.58, 18, 0, Math.PI * 2)
+        ctx.stroke()
+      }
       this._sprite(ctx, e.art, e.x, e.y)
+      if (e.powerupType) {
+        ctx.fillStyle = powerupColor(e.powerupType)
+        ctx.font = '12px sans-serif'
+        ctx.fillText('✦', e.x + spriteCols(e.art) * ctx.measureText('0').width / 2 - 6, e.y - 10)
+        ctx.font = `${this.fontPx}px 'IBM Plex Mono', ui-monospace, monospace`
+      }
     }
 
     // boss + hp bar
@@ -135,4 +148,8 @@ export class Renderer {
     ctx.font = `${this.fontPx}px 'IBM Plex Mono', ui-monospace, monospace`
     ctx.shadowBlur = 6
   }
+}
+
+function powerupColor(type) {
+  return { rapid: '#7fe0c0', shield: '#7db8ff', spread: '#ffd166' }[type] || '#fff'
 }
