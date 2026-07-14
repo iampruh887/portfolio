@@ -1,5 +1,5 @@
 // Entity factories + geometry. Pure (no canvas) so the engine stays testable.
-import { ROCKET, ENEMIES, BOSS } from './ascii.js'
+import { ROCKET, ENEMIES, BOSS, POWERUP } from './ascii.js'
 
 export function spriteCols(art) {
   return art.reduce((m, row) => Math.max(m, row.length), 0)
@@ -59,5 +59,5 @@ export function makeParticle(x, y, char, color) {
 }
 
 export function makePowerup(x, y, kind) {
-  return { kind: 'powerup', ptype: kind, x, y, vy: 70 }
+  return { kind: 'powerup', ptype: kind, art: POWERUP.art, x, y, vy: 70 }
 }

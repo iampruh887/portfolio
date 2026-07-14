@@ -81,7 +81,7 @@ export default function PixelDissolve({ images, onIndexChange }) {
       targetIndex: 0,
       sweepAngle: -Math.PI / 2, // start at top (12 o'clock)
       sweeping: false,
-      shimmerState: null,    // Float32Array — tracks per-block shimmer phase
+      shimmerUntil: null,    // timestamps for temporary neighbor-image flashes
     }
     stateRef.current = s
 
@@ -126,7 +126,7 @@ export default function PixelDissolve({ images, onIndexChange }) {
 
       const total = s.cols * s.rows
       s.blockShown = new Int32Array(total)  // all showing image 0
-      s.shimmerState = new Float32Array(total)
+      s.shimmerUntil = new Float64Array(total)
 
       // Draw initial frame (image 0)
       drawAll(0)
@@ -185,7 +185,7 @@ export default function PixelDissolve({ images, onIndexChange }) {
 
     if (images.length >= 2) scheduleSwap()
 
-    function frame() {
+    function frame(now = performance.now()) {
       if (dead) return
       if (document.hidden) { animId = requestAnimationFrame(frame); return }
 
@@ -233,6 +233,17 @@ export default function PixelDissolve({ images, onIndexChange }) {
           notifyIndex(s.currentIndex)
         }
       } else {
+        // Reset shimmer blocks from the frame loop instead of allocating one
+        // timeout per random block. The old approach could queue thousands of
+        // callbacks during a busy tab and make the page feel hung.
+        for (let idx = 0; idx < s.shimmerUntil.length; idx++) {
+          if (s.shimmerUntil[idx] > 0 && s.shimmerUntil[idx] <= now) {
+            const r = Math.floor(idx / s.cols)
+            const c = idx % s.cols
+            drawBlock(ctx, s.loadedImgs[s.currentIndex], c * s.blockW, r * s.blockH, s.blockW, s.blockH, logW, logH)
+            s.shimmerUntil[idx] = 0
+          }
+        }
         // Shimmer: a few random blocks briefly show a neighbor image then flip back
         if (images.length >= 2) {
           for (let idx = 0; idx < s.blockShown.length; idx++) {
@@ -244,14 +255,7 @@ export default function PixelDissolve({ images, onIndexChange }) {
               const img = s.loadedImgs[neighborIdx]
               // Draw neighbor briefly
               drawBlock(ctx, img, c * s.blockW, r * s.blockH, s.blockW, s.blockH, logW, logH)
-              // Schedule reset back (next couple of frames)
-              const resetImg = s.loadedImgs[s.currentIndex]
-              const capC = c, capR = r
-              setTimeout(() => {
-                if (!dead) {
-                  drawBlock(ctx, resetImg, capC * s.blockW, capR * s.blockH, s.blockW, s.blockH, logW, logH)
-                }
-              }, 80 + Math.random() * 120)
+              s.shimmerUntil[idx] = now + 80 + Math.random() * 120
             }
           }
         }

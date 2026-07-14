@@ -10,7 +10,7 @@ function BoredomPrompt({ onStart }) {
     let timer
     const arm = () => {
       clearTimeout(timer)
-      timer = setTimeout(() => setShow(true), 16000)
+      timer = setTimeout(() => setShow(true), 5000)
     }
     const reset = () => { if (!show) arm() }
     arm()

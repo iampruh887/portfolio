@@ -12,6 +12,8 @@ const PLAYER_BULLET_V = -560
 const ENEMY_BULLET_V = 250
 const FIRE_COOLDOWN = 0.22
 const RAPID_COOLDOWN = 0.09
+const MAX_PARTICLES = 260
+const MAX_ENEMY_BULLETS = 80
 
 export class Engine {
   constructor({ width, height, cw = 10, lh = 18, onEvent = () => {} }) {
@@ -29,7 +31,7 @@ export class Engine {
     this.score = 0
     this.kills = 0
     this.killsSinceDiscovery = 0
-    this.rocket = makeRocket(this.w / 2 - this.cw, this.h - 120)
+    this.rocket = makeRocket(this.w / 2 - 28, this.h - 100)
     this.enemies = []
     this.bullets = []
     this.eBullets = []
@@ -51,8 +53,8 @@ export class Engine {
     this.w = w
     this.h = h
     if (this.rocket) {
-      this.rocket.x = Math.min(this.rocket.x, w - 40)
-      this.rocket.y = Math.min(this.rocket.y, h - 40)
+      this.rocket.x = Math.min(this.rocket.x, w - 56)
+      this.rocket.y = Math.min(this.rocket.y, h - 60)
     }
   }
 
@@ -160,7 +162,9 @@ export class Engine {
         e.fireT -= dt
         if (e.fireT <= 0 && e.y < this.h * 0.7) {
           const cx = e.x + (spriteCols(e.art) * this.cw) / 2
-          this.eBullets.push(makeBullet(cx, e.y + e.art.length * this.lh, ENEMY_BULLET_V, 'enemy'))
+          if (this.eBullets.length < MAX_ENEMY_BULLETS) {
+            this.eBullets.push(makeBullet(cx, e.y + e.art.length * this.lh, ENEMY_BULLET_V, 'enemy'))
+          }
           e.fireT = e.spec.fireRate * (0.7 + Math.random() * 0.6)
         }
       }
@@ -184,7 +188,7 @@ export class Engine {
         const bx = boss.x + (wpx * (i + 0.5)) / n
         const bb = makeBullet(bx, boss.y + boss.art.length * this.lh, ENEMY_BULLET_V, 'enemy')
         bb.vx = (i - (n - 1) / 2) * 40
-        this.eBullets.push(bb)
+        if (this.eBullets.length < MAX_ENEMY_BULLETS) this.eBullets.push(bb)
       }
       boss.fireT = boss.spec.fireRate
     }
@@ -291,7 +295,7 @@ export class Engine {
 
   _burst(x, y, color, n) {
     const frame = EXPLOSION[1]
-    for (let i = 0; i < n; i++) {
+    for (let i = 0; i < n && this.particles.length < MAX_PARTICLES; i++) {
       this.particles.push(makeParticle(x, y, frame[i % frame.length], color))
     }
   }

@@ -83,17 +83,17 @@ export class Renderer {
       ctx.shadowBlur = 6
     }
 
-    // rocket (blink while invulnerable)
+    // The player is the site's minimized circular menu hub, not a second ASCII
+    // ship. Keep it geometric so it reads like the real navigation control.
     const r = world.rocket
     if (r && !(r.invuln > 0 && Math.floor(r.invuln * 12) % 2)) {
       ctx.shadowColor = '#39f0d0'
       ctx.fillStyle = r.shield > 0 ? '#7db8ff' : '#5ff2d6'
-      this._sprite(ctx, r.art, r.x, r.y)
+      this._menuHub(ctx, r)
       if (r.shield > 0) {
         ctx.strokeStyle = 'rgba(125,184,255,0.5)'
         ctx.beginPath()
-        const cw = ctx.measureText('0').width
-        ctx.ellipse(r.x + spriteCols(r.art) * cw / 2, r.y + r.art.length * 10, 34, 26, 0, 0, Math.PI * 2)
+        ctx.ellipse(r.x + 28, r.y + 28, 38, 38, 0, 0, Math.PI * 2)
         ctx.stroke()
       }
     }
@@ -113,5 +113,26 @@ export class Renderer {
   _sprite(ctx, art, x, y) {
     const lh = Math.round(this.fontPx * 1.15)
     for (let i = 0; i < art.length; i++) ctx.fillText(art[i], x, y + i * lh)
+  }
+
+  _menuHub(ctx, r) {
+    const cx = r.x + 28
+    const cy = r.y + 28
+    ctx.shadowBlur = 12
+    ctx.beginPath()
+    ctx.arc(cx, cy, 27, 0, Math.PI * 2)
+    ctx.fillStyle = 'rgba(8, 20, 30, 0.94)'
+    ctx.fill()
+    ctx.strokeStyle = ctx.fillStyle = r.shield > 0 ? '#7db8ff' : '#5ff2d6'
+    ctx.lineWidth = 2
+    ctx.stroke()
+    ctx.font = '20px sans-serif'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText('🙭', cx, cy + 1)
+    ctx.textAlign = 'start'
+    ctx.textBaseline = 'top'
+    ctx.font = `${this.fontPx}px 'IBM Plex Mono', ui-monospace, monospace`
+    ctx.shadowBlur = 6
   }
 }

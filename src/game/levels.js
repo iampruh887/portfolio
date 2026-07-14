@@ -11,8 +11,10 @@ function spread(n, width, margin = 80) {
 // Build the wave list for a level. Higher levels: more enemies, tougher mix.
 export function buildLevel(level, width) {
   const waves = []
-  const rows = 2 + Math.min(level, 3)
-  const perRow = 3 + Math.min(level, 4)
+  // Keep the screen readable and collision work bounded. Difficulty comes from
+  // the mix and speed, not from filling the entire playfield with ships.
+  const rows = 2 + Math.min(level, 2)
+  const perRow = 2 + Math.min(level, 2)
 
   for (let r = 0; r < rows; r++) {
     const xs = spread(perRow + (r % 2), width)
