@@ -3,6 +3,7 @@ import { SECTIONS } from './sectionConfig.js'
 import AdminSection from './AdminSection.jsx'
 import { adminLogin, adminLoggedIn, adminLogout } from '../lib/adminApi.js'
 import '../style/Admin.css'
+import Analytics from './Analytics.jsx'
 
 function Login({ onSuccess }) {
   const [password, setPassword] = useState('')
@@ -25,7 +26,7 @@ function Login({ onSuccess }) {
 
 function Admin() {
   const [loggedIn, setLoggedIn] = useState(adminLoggedIn())
-  const tables = Object.keys(SECTIONS)
+  const tables = ['analytics', ...Object.keys(SECTIONS)]
   const [active, setActive] = useState('projects')
 
   if (!loggedIn) return <div className="admin-wrap"><Login onSuccess={() => setLoggedIn(true)} /></div>
@@ -41,11 +42,11 @@ function Admin() {
       <nav className="admin-tabs">
         {tables.map((t) => (
           <button key={t} className={t === active ? 'active' : ''} onClick={() => setActive(t)}>
-            {SECTIONS[t].label}
+            {t === 'analytics' ? 'Visits' : SECTIONS[t].label}
           </button>
         ))}
       </nav>
-      <AdminSection key={active} table={active} config={SECTIONS[active]} />
+      {active === 'analytics' ? <Analytics /> : <AdminSection key={active} table={active} config={SECTIONS[active]} />}
     </div>
   )
 }

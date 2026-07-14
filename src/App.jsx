@@ -6,6 +6,7 @@ import Projects from './Projects.jsx'
 import About from './pages/About.jsx'
 import AdminGate from './components/AdminGate.jsx'
 import GameOverlay from './components/GameOverlay.jsx'
+import VisitTracker from './components/VisitTracker.jsx'
 const Admin = lazy(() => import('./admin/Admin.jsx'))
 
 const VIEW_PATHS = { menu: '/', projects: '/projects', blogs: '/blogs', about: '/about' }
@@ -30,6 +31,7 @@ function App() {
       </Routes>
       <AdminGate />
       <GameOverlay />
+      <VisitTracker />
     </>
   )
 }

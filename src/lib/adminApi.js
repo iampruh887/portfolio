@@ -48,6 +48,8 @@ export const adminDelete = (table, id) =>
 export const adminReorder = (table, ids) =>
   unwrap(fetch('/api/admin/reorder', { method: 'POST', headers: headers(), body: JSON.stringify({ table, ids }) }))
 
+export const adminAnalytics = () => unwrap(fetch('/api/admin/analytics', { headers: headers(false) }))
+
 export async function adminUpload(file) {
   const dataBase64 = await new Promise((resolve, reject) => {
     const reader = new FileReader()

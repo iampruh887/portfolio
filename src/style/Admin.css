@@ -72,3 +72,14 @@
 .image-field { display: flex; flex-direction: column; gap: 6px; }
 .image-preview { max-width: 160px; border: 0.5px solid rgba(43, 43, 40, 0.45); padding: 4px; background: #fff; }
 .admin-error { color: #C8321E; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 13px; }
+.analytics-note { color: var(--graphite); font-size: 13px; }
+.analytics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+.analytics h2 { font: 400 22px var(--serif); margin: 18px 0 10px; }
+.india-map { width: 100%; max-width: 360px; height: 360px; background: var(--paper-2); border: 1px solid var(--hairline); }
+.india-shape { fill: rgba(200, 50, 30, .08); stroke: var(--ink); stroke-width: .7; }
+.heat-dot { fill: var(--red); fill-opacity: .8; stroke: var(--paper-2); stroke-width: .5; }
+.analytics-list { list-style: none; padding: 0; margin: 0; }
+.analytics-list li { display: flex; justify-content: space-between; border-bottom: 1px solid var(--hairline); padding: 8px 0; }
+.analytics-table { border-top: 1px solid var(--ink); font: 12px var(--mono); }
+.analytics-row { display: grid; grid-template-columns: 180px 1fr 100px; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--hairline); }
+@media (max-width: 700px) { .analytics-grid { grid-template-columns: 1fr; } .analytics-row { grid-template-columns: 1fr; gap: 3px; } }

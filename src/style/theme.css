@@ -313,10 +313,10 @@ html.nav-open .ledger { --ring-col: 372px; }
 }
 
 .home-name {
-  font-family: var(--mono);
+  font-family: var(--serif);
   font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 3px;
+  font-weight: 400;
+  letter-spacing: 1.5px;
   color: var(--ink);
   margin: 0 0 6px;
 }
