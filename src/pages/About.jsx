@@ -4,6 +4,7 @@ import RingNav from '../components/RingNav.jsx'
 import ContributionGraph from '../components/ContributionGraph.jsx'
 import { fetchList, fetchProfile } from '../lib/content.js'
 import '../style/About.css'
+import PixelDissolve from '../components/PixelDissolve.jsx'
 
 const CATEGORY_ORDER = ['language', 'framework', 'library', 'ai_tool', 'dev_tool', 'other']
 const CATEGORY_LABELS = {
@@ -27,19 +28,13 @@ function Stars({ rating }) {
 
 function HeroRotator({ images }) {
   const [index, setIndex] = useState(0)
-  useEffect(() => {
-    setIndex(0)
-    if (images.length < 2) return
-    const t = setInterval(() => setIndex((i) => (i + 1) % images.length), 4000)
-    return () => clearInterval(t)
-  }, [images])
   if (images.length === 0) {
     return <div className="ab-fig-placeholder">photograph pending</div>
   }
   const img = images[index]
   return (
     <figure className="ab-fig">
-      <img src={img.image_url} alt={img.caption || ''} />
+      <PixelDissolve images={images} onIndexChange={setIndex} />
       <figcaption>FIG. {String(index + 1).padStart(2, '0')}{img.caption ? ` — ${img.caption}` : ''}</figcaption>
     </figure>
   )
