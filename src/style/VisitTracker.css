@@ -1,5 +1,0 @@
-.visit-consent { position: fixed; z-index: 100; left: 24px; right: 24px; bottom: 24px; max-width: 720px; margin: auto; display: flex; gap: 12px; align-items: center; padding: 14px 16px; background: var(--paper-2); border: 1px solid var(--ink); box-shadow: 5px 5px 0 var(--ink); font-size: 13px; }
-.visit-consent span { flex: 1; }
-.visit-consent button { border: 1px solid var(--ink); background: var(--ink); color: var(--paper); padding: 7px 12px; cursor: pointer; }
-.visit-consent button.secondary { background: transparent; color: var(--ink); }
-@media (max-width: 620px) { .visit-consent { flex-wrap: wrap; } }
